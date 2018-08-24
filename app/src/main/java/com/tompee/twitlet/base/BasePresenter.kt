@@ -1,26 +1,29 @@
 package com.tompee.twitlet.base
 
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 abstract class BasePresenter<T : BaseView> {
 
-    private val subscription = CompositeDisposable()
+    private val subscriptions = CompositeDisposable()
 
-    protected var view: T? = null
-        private set
+    protected lateinit var view: T
 
     fun attachView(view: T) {
         this.view = view
-        onViewAttached()
+        onViewAttached(view)
     }
 
     fun detachView() {
-        subscription.clear()
+        subscriptions.clear()
         onViewDetached()
-        view = null
     }
 
-    abstract fun onViewAttached()
+    abstract fun onViewAttached(view: T)
 
     abstract fun onViewDetached()
+
+    protected fun addSubscription(subscription: Disposable) {
+        subscriptions.add(subscription)
+    }
 }
