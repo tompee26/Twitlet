@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "450275828152",
+    "firebase_url": "https://twitlet-26.firebaseio.com",
+    "project_id": "twitlet-26",
+    "storage_bucket": "twitlet-26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450275828152:android:71341f5d2abddbe4",
+        "android_client_info": {
+          "package_name": "com.tompee.twitlet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450275828152-m9quj9ksh1lm0lqblgbuvnnns56j19uh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tompee.twitlet",
+            "certificate_hash": "60fc4186bb9fa2416149f19ebb5ed9cbd2aea9f9"
+          }
+        },
+        {
+          "client_id": "450275828152-bb7qmudj014rb3gjgt9eg0cecu31cc6t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCuPIYgNKjtyCScxg6nIIAnWA2fLGLJ_8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450275828152-bb7qmudj014rb3gjgt9eg0cecu31cc6t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

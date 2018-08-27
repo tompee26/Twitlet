@@ -3,6 +3,8 @@
     <string name="content_description">Content Description</string>
     <string name="app_subtitle">Share your thoughts</string>
 
+    <string name="label_positive_button">OK</string>
+
     <!-- Login screen -->
     <string name="label_login_name">Email</string>
     <string name="label_login_pass">Password</string>
@@ -13,5 +15,9 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_invalid_email">Invalid email format</string>
     <string name="error_pass_min">Must be at least 6 characters</string>
+    <string name="signup_successful_title">Registration successful</string>
+    <string name="signup_verify_rationale">A message was sent to your email. Please verify and login afterwards.</string>
+    <string name="progress_login_register">Registering account…</string>
+    <string name="progress_login_authenticate">Authenticating…</string>
 
 </resources>

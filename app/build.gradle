@@ -26,33 +26,45 @@ android {
 }
 
 project.ext {
-    constraintLayoutVersion = "1.1.2"
-    supportLibraryVersion = "27.1.1"
-    rxVersion = "2.1.0"
+    constraintLayout = "1.1.2"
+    supportLibrary = "27.1.1"
+    rx = "2.1.0"
     rxBinding = "2.1.1"
-    daggerVersion = "2.14.1"
+    dagger = "2.14.1"
+    firebase = "16.0.3"
     multidex = "1.0.3"
+    timber = "4.7.1"
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation "com.android.support.constraint:constraint-layout:$project.constraintLayoutVersion"
-    implementation "com.android.support:appcompat-v7:$project.supportLibraryVersion"
+    implementation "com.android.support.constraint:constraint-layout:$project.constraintLayout"
+    implementation "com.android.support:appcompat-v7:$project.supportLibrary"
+    implementation "com.android.support:support-v4:$project.supportLibrary"
+    implementation "com.android.support:support-media-compat:$project.supportLibrary"
+    implementation "com.android.support:design:$project.supportLibrary"
     implementation "com.android.support:multidex:$project.multidex"
 
-    implementation "io.reactivex.rxjava2:rxkotlin:$project.rxVersion"
+    implementation "io.reactivex.rxjava2:rxkotlin:$project.rx"
     implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$project.rxBinding"
 
-    implementation "com.google.dagger:dagger:$project.daggerVersion"
-    implementation "com.google.dagger:dagger-android:$project.daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$project.daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$project.daggerVersion"
-    kapt "com.google.dagger:dagger-android-processor:$project.daggerVersion"
-    kapt "com.google.dagger:dagger-android-support:$project.daggerVersion"
+    implementation "com.google.dagger:dagger:$project.dagger"
+    implementation "com.google.dagger:dagger-android:$project.dagger"
+    implementation "com.google.dagger:dagger-android-support:$project.dagger"
+    kapt "com.google.dagger:dagger-compiler:$project.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$project.dagger"
+    kapt "com.google.dagger:dagger-android-support:$project.dagger"
+
+    implementation "com.google.firebase:firebase-core:$project.firebase"
+    implementation "com.google.firebase:firebase-auth:$project.firebase"
+
+    implementation "com.jakewharton.timber:timber:$project.timber"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
+
+apply plugin: 'com.google.gms.google-services'

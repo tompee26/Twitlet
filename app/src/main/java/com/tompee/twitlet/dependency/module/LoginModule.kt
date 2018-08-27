@@ -5,6 +5,7 @@ import com.tompee.twitlet.dependency.scope.LoginScope
 import com.tompee.twitlet.feature.login.LoginPageAdapter
 import com.tompee.twitlet.feature.login.page.LoginFragment
 import com.tompee.twitlet.feature.login.page.LoginPagePresenter
+import com.tompee.twitlet.interactor.AuthInteractor
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Scheduler
@@ -30,6 +31,7 @@ class LoginModule(private val fragmentActivity: FragmentActivity) {
             LoginPageAdapter(fragmentActivity.supportFragmentManager, loginFragment, signupFragment)
 
     @Provides
-    fun provideLoginPagePresenter(@Named("io") io: Scheduler,
-                                  @Named("ui") ui: Scheduler) = LoginPagePresenter(io, ui)
+    fun provideLoginPagePresenter(authInteractor: AuthInteractor,
+                                  @Named("io") io: Scheduler,
+                                  @Named("ui") ui: Scheduler) = LoginPagePresenter(authInteractor, io, ui)
 }

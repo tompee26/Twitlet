@@ -2,22 +2,25 @@ package com.tompee.twitlet.feature.login.page
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.Snackbar
+import android.support.v7.app.AlertDialog
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.tompee.twitlet.R
 import com.tompee.twitlet.base.BaseFragment
 import com.tompee.twitlet.feature.login.LoginActivity
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_login.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class LoginFragment : BaseFragment(), LoginPageView {
-
     @Inject
     lateinit var loginPagePresenter: LoginPagePresenter
 
     private lateinit var listener: PageSwitchListener
+    private lateinit var progressDialog: ProgressDialog
 
     companion object {
         const val LOGIN = 0
@@ -39,17 +42,16 @@ class LoginFragment : BaseFragment(), LoginPageView {
         val type = arguments?.getInt(TYPE_TAG) ?: LOGIN
         switchButton.setOnClickListener { listener.onPageSwitch(type) }
         if (type == LOGIN) {
-//            progressDialog = ProgressDialog(context, R.style.AppTheme_Login_Dialog)
+            progressDialog = ProgressDialog.newInstance(R.color.colorLoginButton, R.string.progress_login_authenticate)
             switchButton.text = getString(R.string.label_login_new_account)
             commandButton.text = getString(R.string.label_login_button)
             commandButton.setBackgroundResource(R.drawable.ripple_login)
         } else {
-//            progressDialog = ProgressDialog(context, R.style.AppTheme_SignUp_Dialog)
+            progressDialog = ProgressDialog.newInstance(R.color.colorSignupButton, R.string.progress_login_register)
             switchButton.text = getString(R.string.label_login_registered)
             commandButton.text = getString(R.string.label_login_sign_up)
             commandButton.setBackgroundResource(R.drawable.ripple_sign_up)
         }
-//        progressDialog.isIndeterminate = true
     }
 
     override fun onAttach(context: Context?) {
@@ -69,14 +71,19 @@ class LoginFragment : BaseFragment(), LoginPageView {
     override fun getEmail(): Observable<String> = RxTextView.textChanges(userView)
             .skipInitialValue()
             .distinct()
-            .debounce(1, TimeUnit.SECONDS)
             .map { it.toString() }
+            .map { it.trim() }
 
     override fun getPassword(): Observable<String> = RxTextView.textChanges(passView)
             .skipInitialValue()
             .distinct()
-            .debounce(1, TimeUnit.SECONDS)
             .map { it.toString() }
+            .map { it.trim() }
+
+    override fun getViewType(): Int = arguments?.getInt(TYPE_TAG) ?: LoginFragment.LOGIN
+
+    override fun command(): Observable<Any> = RxView.clicks(commandButton)
+            .doOnNext { hideKeyboard() }
 
     override fun showEmptyEmailError() {
         userView.error = getString(R.string.error_field_required)
@@ -106,5 +113,30 @@ class LoginFragment : BaseFragment(), LoginPageView {
         passView.error = null
     }
 
+    override fun showProgressDialog() {
+        progressDialog.show(fragmentManager, "progress")
+    }
+
+    override fun dismissProgressDialog() {
+        progressDialog.dismiss()
+    }
+
+    override fun showSignupSuccessMessage() {
+        AlertDialog.Builder(activity!!, R.style.DialogStyle)
+                .setTitle(R.string.signup_successful_title)
+                .setMessage(R.string.signup_verify_rationale)
+                .setPositiveButton(R.string.label_positive_button, null)
+                .show()
+    }
+
+    override fun showError(message: String) {
+        Snackbar.make(activity?.findViewById(android.R.id.content)!!,
+                message, Snackbar.LENGTH_LONG).show()
+    }
     //endregion
+
+    private fun hideKeyboard() {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
 }

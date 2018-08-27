@@ -6,6 +6,8 @@ import io.reactivex.Observable
 interface LoginPageView : BaseView {
     fun getEmail(): Observable<String>
     fun getPassword(): Observable<String>
+    fun getViewType(): Int
+    fun command(): Observable<Any>
 
     fun showEmptyEmailError()
     fun showInvalidEmailError()
@@ -14,4 +16,8 @@ interface LoginPageView : BaseView {
     fun showPasswordShortError()
     fun clearPasswordError()
 
+    fun showProgressDialog()
+    fun dismissProgressDialog()
+    fun showSignupSuccessMessage()
+    fun showError(message : String)
 }

@@ -7,13 +7,16 @@ import android.support.v7.app.AppCompatDelegate
 import com.tompee.twitlet.dependency.component.AppComponent
 import com.tompee.twitlet.dependency.component.DaggerAppComponent
 import com.tompee.twitlet.dependency.module.AppModule
+import com.tompee.twitlet.dependency.module.AuthModule
 import com.tompee.twitlet.dependency.module.SchedulerModule
+import timber.log.Timber
 
 class TwitletApplication : MultiDexApplication() {
 
     val component: AppComponent by lazy {
         DaggerAppComponent.builder()
                 .appModule(AppModule(this))
+                .authModule(AuthModule())
                 .schedulerModule(SchedulerModule())
                 .build()
     }
@@ -26,6 +29,7 @@ class TwitletApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+        Timber.plant(Timber.DebugTree())
     }
 
     override fun attachBaseContext(base: Context?) {
