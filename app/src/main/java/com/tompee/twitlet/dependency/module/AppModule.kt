@@ -2,6 +2,8 @@ package com.tompee.twitlet.dependency.module
 
 import android.content.Context
 import com.tompee.twitlet.TwitletApplication
+import com.tompee.twitlet.core.image.ImageProcessor
+import com.tompee.twitlet.model.User
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -16,4 +18,12 @@ class AppModule(private val application: TwitletApplication) {
     @Singleton
     @Provides
     fun provideApplication(): TwitletApplication = application
+
+    @Singleton
+    @Provides
+    fun provideUser(): User = User()
+
+    @Singleton
+    @Provides
+    fun provideImageProcessor(): ImageProcessor = ImageProcessor(application)
 }

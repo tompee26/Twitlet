@@ -9,10 +9,10 @@ import com.tompee.twitlet.dependency.component.DaggerSplashComponent
 import com.tompee.twitlet.dependency.module.SplashModule
 import com.tompee.twitlet.feature.login.LoginActivity
 import com.tompee.twitlet.feature.profile.ProfileActivity
+import com.tompee.twitlet.feature.timeline.TimelineActivity
 import javax.inject.Inject
 
 class SplashActivity : BaseActivity(), SplashView {
-
     @Inject
     lateinit var splashPresenter: SplashPresenter
 
@@ -39,14 +39,24 @@ class SplashActivity : BaseActivity(), SplashView {
     //region SplashView
     override fun moveToProfileScreen() {
         val intent = Intent(this, ProfileActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         finish()
     }
 
     override fun moveToLoginScreen() {
         val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         finish()
     }
+
+    override fun moveToTimelineScreen() {
+        val intent = Intent(this, TimelineActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+        finish()
+    }
+
     //endregion
 }

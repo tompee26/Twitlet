@@ -21,5 +21,6 @@ interface LoginPageView : BaseView {
     fun showSignupSuccessMessage()
     fun showError(message : String)
 
-    fun moveToProfileView()
+    fun moveToProfileScreen()
+    fun moveToTimelineScreen()
 }

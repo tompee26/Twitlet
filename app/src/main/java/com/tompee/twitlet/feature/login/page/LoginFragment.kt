@@ -11,8 +11,10 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.tompee.twitlet.R
 import com.tompee.twitlet.base.BaseFragment
+import com.tompee.twitlet.feature.common.ProgressDialog
 import com.tompee.twitlet.feature.login.LoginActivity
 import com.tompee.twitlet.feature.profile.ProfileActivity
+import com.tompee.twitlet.feature.timeline.TimelineActivity
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
@@ -137,8 +139,16 @@ class LoginFragment : BaseFragment(), LoginPageView {
                 message, Snackbar.LENGTH_LONG).show()
     }
 
-    override fun moveToProfileView() {
+    override fun moveToProfileScreen() {
         val intent = Intent(context, ProfileActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+        activity?.finish()
+    }
+
+    override fun moveToTimelineScreen() {
+        val intent = Intent(context, TimelineActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         activity?.finish()
     }

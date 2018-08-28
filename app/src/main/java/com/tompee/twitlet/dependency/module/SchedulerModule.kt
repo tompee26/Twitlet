@@ -19,4 +19,10 @@ class SchedulerModule {
     @Provides
     @Named("ui")
     fun provideUiScheduler(): Scheduler = AndroidSchedulers.mainThread()
+
+    @Singleton
+    @Provides
+    @Named("co")
+    fun provideComputationScheduler(): Scheduler = Schedulers.computation()
+
 }

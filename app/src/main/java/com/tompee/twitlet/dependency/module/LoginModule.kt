@@ -6,6 +6,7 @@ import com.tompee.twitlet.feature.login.LoginPageAdapter
 import com.tompee.twitlet.feature.login.page.LoginFragment
 import com.tompee.twitlet.feature.login.page.LoginPagePresenter
 import com.tompee.twitlet.interactor.AuthInteractor
+import com.tompee.twitlet.interactor.DataInteractor
 import com.tompee.twitlet.model.User
 import dagger.Module
 import dagger.Provides
@@ -33,8 +34,9 @@ class LoginModule(private val fragmentActivity: FragmentActivity) {
 
     @Provides
     fun provideLoginPagePresenter(authInteractor: AuthInteractor,
+                                  dataInteractor: DataInteractor,
                                   user: User,
                                   @Named("io") io: Scheduler,
                                   @Named("ui") ui: Scheduler) =
-            LoginPagePresenter(authInteractor, user, io, ui)
+            LoginPagePresenter(authInteractor, dataInteractor, user, io, ui)
 }

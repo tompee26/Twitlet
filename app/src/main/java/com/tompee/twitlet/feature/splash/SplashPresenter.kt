@@ -25,7 +25,7 @@ class SplashPresenter(private val authInteractor: AuthInteractor,
                 .flatMap { email ->
                     dataInteractor.getUser(email)
                             .observeOn(ui)
-                            .doOnSuccess {}
+                            .doOnSuccess { view.moveToTimelineScreen() }
                             .doOnError { view.moveToProfileScreen() }
                             .subscribeOn(io)
                 }

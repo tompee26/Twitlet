@@ -28,11 +28,9 @@ class FirebaseUserDao(private val db: FirebaseFirestore) : UserDao {
     override fun saveUser(userEntity: UserEntity): Completable {
         return Completable.create { emitter ->
             db.collection(PROFILE).document(userEntity.email).set(userEntity)
-                    .addOnSuccessListener {
-                        emitter.onComplete()
-                    }.addOnFailureListener {
-                        emitter.onError(Throwable(it.message))
-                    }
+            /* Offline does not trigger completion event.
+            That's why we will assume that all writes are successful */
+            emitter.onComplete()
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.tompee.twitlet.feature.login.page
+package com.tompee.twitlet.feature.common
 
 import android.app.DialogFragment
 import android.os.Bundle

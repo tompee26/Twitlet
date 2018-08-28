@@ -4,6 +4,7 @@ import android.util.Patterns
 import com.tompee.twitlet.Constants.MIN_PASS_COUNT
 import com.tompee.twitlet.base.BasePresenter
 import com.tompee.twitlet.interactor.AuthInteractor
+import com.tompee.twitlet.interactor.DataInteractor
 import com.tompee.twitlet.model.User
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -13,6 +14,7 @@ import io.reactivex.rxkotlin.withLatestFrom
 import java.util.concurrent.TimeUnit
 
 class LoginPagePresenter(private val authInteractor: AuthInteractor,
+                         private val dataInteractor: DataInteractor,
                          private val user: User,
                          private val io: Scheduler,
                          private val ui: Scheduler) : BasePresenter<LoginPageView>() {
@@ -93,8 +95,8 @@ class LoginPagePresenter(private val authInteractor: AuthInteractor,
                 .doOnNext { view.showProgressDialog() }
                 .withLatestFrom(view.getEmail(), view.getPassword()) { _, email, pass -> Pair(email, pass) }
         if (view.getViewType() == LoginFragment.SIGN_UP) {
-            addSubscription(command.flatMapCompletable {
-                authInteractor.signup(it.first, it.second)
+            addSubscription(command.flatMapCompletable { pair ->
+                authInteractor.signup(pair.first, pair.second)
                         .observeOn(ui)
                         .doOnComplete(view::showSignupSuccessMessage)
                         .doOnError { view.showError(it.message ?: "Error occurred") }
@@ -103,19 +105,29 @@ class LoginPagePresenter(private val authInteractor: AuthInteractor,
                         .subscribeOn(io)
             }.subscribe())
         } else {
-            addSubscription(command.flatMapSingle {
-                authInteractor.login(it.first, it.second)
+            addSubscription(command.flatMapSingle { pair ->
+                authInteractor.login(pair.first, pair.second)
                         .observeOn(ui)
-                        .doOnSuccess {
-                            user.email = it
-                            user.isAuthenticated = true
-                        }
-                        .doOnSuccess { view.moveToProfileView() }
                         .doOnError {
                             view.showError(it.message ?: "Error occurred")
                             view.dismissProgressDialog()
                         }
-                        .onErrorResumeNext(Single.just(""))
+                        .doOnSuccess {
+                            user.email = it
+                            user.isAuthenticated = true
+                        }
+                        .flatMap { email ->
+                            dataInteractor.getUser(email)
+                                    .observeOn(ui)
+                                    .doOnSuccess {
+                                        user.nickname = it.nickname
+                                        user.image = it.image
+                                        view.moveToTimelineScreen()
+                                    }
+                                    .doOnError { view.moveToProfileScreen() }
+                                    .onErrorResumeNext(Single.just(User()))
+                                    .subscribeOn(io)
+                        }
                         .subscribeOn(io)
             }.subscribe())
         }
