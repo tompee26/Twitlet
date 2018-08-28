@@ -1,6 +1,7 @@
 package com.tompee.twitlet.feature.login.page
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
@@ -11,11 +12,13 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.tompee.twitlet.R
 import com.tompee.twitlet.base.BaseFragment
 import com.tompee.twitlet.feature.login.LoginActivity
+import com.tompee.twitlet.feature.profile.ProfileActivity
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
 
 class LoginFragment : BaseFragment(), LoginPageView {
+
     @Inject
     lateinit var loginPagePresenter: LoginPagePresenter
 
@@ -133,6 +136,13 @@ class LoginFragment : BaseFragment(), LoginPageView {
         Snackbar.make(activity?.findViewById(android.R.id.content)!!,
                 message, Snackbar.LENGTH_LONG).show()
     }
+
+    override fun moveToProfileView() {
+        val intent = Intent(context, ProfileActivity::class.java)
+        startActivity(intent)
+        activity?.finish()
+    }
+
     //endregion
 
     private fun hideKeyboard() {

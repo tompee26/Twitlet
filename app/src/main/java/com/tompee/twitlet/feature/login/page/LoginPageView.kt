@@ -20,4 +20,6 @@ interface LoginPageView : BaseView {
     fun dismissProgressDialog()
     fun showSignupSuccessMessage()
     fun showError(message : String)
+
+    fun moveToProfileView()
 }

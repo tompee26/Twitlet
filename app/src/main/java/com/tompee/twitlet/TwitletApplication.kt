@@ -8,7 +8,9 @@ import com.tompee.twitlet.dependency.component.AppComponent
 import com.tompee.twitlet.dependency.component.DaggerAppComponent
 import com.tompee.twitlet.dependency.module.AppModule
 import com.tompee.twitlet.dependency.module.AuthModule
+import com.tompee.twitlet.dependency.module.DataModule
 import com.tompee.twitlet.dependency.module.SchedulerModule
+import com.tompee.twitlet.dependency.module.UserModule
 import timber.log.Timber
 
 class TwitletApplication : MultiDexApplication() {
@@ -18,6 +20,8 @@ class TwitletApplication : MultiDexApplication() {
                 .appModule(AppModule(this))
                 .authModule(AuthModule())
                 .schedulerModule(SchedulerModule())
+                .userModule(UserModule())
+                .dataModule(DataModule())
                 .build()
     }
 

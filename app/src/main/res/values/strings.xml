@@ -18,6 +18,12 @@
     <string name="signup_successful_title">Registration successful</string>
     <string name="signup_verify_rationale">A message was sent to your email. Please verify and login afterwards.</string>
     <string name="progress_login_register">Registering account…</string>
-    <string name="progress_login_authenticate">Authenticating…</string>
+    <string name="progress_login_authenticate">Logging in…</string>
+
+    <!-- Profile -->
+    <string name="profile_label_setup">Setup your profile!</string>
+    <string name="profile_label_nickname">Nickname</string>
+    <string name="profile_label_save">Create Profile</string>
+    <string name="profile_label_picture">Profile Image</string>
 
 </resources>

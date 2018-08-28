@@ -7,6 +7,17 @@ import io.reactivex.Single
 
 class FirebaseAuthenticator(private val firebaseAuth: FirebaseAuth) : Authenticator {
 
+    override fun getCurrentUser(): Single<String> {
+        return Single.create<String> { emitter ->
+            val currentUser = firebaseAuth.currentUser
+            if (currentUser != null && currentUser.email != null) {
+                emitter.onSuccess(currentUser.email!!)
+            } else {
+                emitter.onError(Throwable("No user logged in"))
+            }
+        }
+    }
+
     override fun signup(email: String, password: String): Completable {
         return Completable.create { emitter ->
             firebaseAuth.createUserWithEmailAndPassword(email, password)

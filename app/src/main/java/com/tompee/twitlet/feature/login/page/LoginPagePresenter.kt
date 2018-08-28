@@ -4,6 +4,7 @@ import android.util.Patterns
 import com.tompee.twitlet.Constants.MIN_PASS_COUNT
 import com.tompee.twitlet.base.BasePresenter
 import com.tompee.twitlet.interactor.AuthInteractor
+import com.tompee.twitlet.model.User
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -12,6 +13,7 @@ import io.reactivex.rxkotlin.withLatestFrom
 import java.util.concurrent.TimeUnit
 
 class LoginPagePresenter(private val authInteractor: AuthInteractor,
+                         private val user: User,
                          private val io: Scheduler,
                          private val ui: Scheduler) : BasePresenter<LoginPageView>() {
     enum class InputError {
@@ -98,14 +100,23 @@ class LoginPagePresenter(private val authInteractor: AuthInteractor,
                         .doOnError { view.showError(it.message ?: "Error occurred") }
                         .onErrorComplete()
                         .doOnComplete(view::dismissProgressDialog)
+                        .subscribeOn(io)
             }.subscribe())
         } else {
             addSubscription(command.flatMapSingle {
                 authInteractor.login(it.first, it.second)
                         .observeOn(ui)
-                        .doOnError { view.showError(it.message ?: "Error occurred") }
+                        .doOnSuccess {
+                            user.email = it
+                            user.isAuthenticated = true
+                        }
+                        .doOnSuccess { view.moveToProfileView() }
+                        .doOnError {
+                            view.showError(it.message ?: "Error occurred")
+                            view.dismissProgressDialog()
+                        }
                         .onErrorResumeNext(Single.just(""))
-                        .doOnSuccess { view.dismissProgressDialog() }
+                        .subscribeOn(io)
             }.subscribe())
         }
     }
