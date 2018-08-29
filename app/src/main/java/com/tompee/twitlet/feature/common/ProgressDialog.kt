@@ -1,9 +1,10 @@
 package com.tompee.twitlet.feature.common
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.app.DialogFragment
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.view.View
 import android.widget.TextView
 import com.tompee.twitlet.R
 import com.tompee.twitlet.base.BaseDialogFragment
@@ -24,15 +25,18 @@ class ProgressDialog : BaseDialogFragment() {
         }
     }
 
-    override fun setupComponent() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val view = activity?.layoutInflater?.inflate(R.layout.dialog_progress, null)
+        view?.setBackgroundColor(ContextCompat.getColor(context!!,
+                arguments?.getInt(TAG_COLOR) ?: R.color.colorLoginButton))
+        val textView = view?.findViewById<TextView>(R.id.progress_text)
+        textView?.setText(arguments?.getInt(TAG_TEXT) ?: R.string.progress_login_authenticate)
+        return AlertDialog.Builder(activity!!)
+                .setView(view)
+                .setCancelable(false)
+                .create()
     }
 
-    override fun layoutId(): Int = R.layout.dialog_progress
-
-    override fun setupView(view: View) {
-        view.setBackgroundColor(ContextCompat.getColor(context!!,
-                arguments?.getInt(TAG_COLOR) ?: R.color.colorLoginButton))
-        val textView = view.findViewById<TextView>(R.id.progress_text)
-        textView.setText(arguments?.getInt(TAG_TEXT) ?: R.string.progress_login_authenticate)
+    override fun setupComponent() {
     }
 }

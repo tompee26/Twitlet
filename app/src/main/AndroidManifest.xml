@@ -34,6 +34,14 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/ImageCropTheme" />
 
+        <activity
+            android:name=".feature.about.AboutActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+
+        <activity
+            android:name=".feature.license.LicenseActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+
     </application>
 
 </manifest>

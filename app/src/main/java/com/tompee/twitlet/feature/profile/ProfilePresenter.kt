@@ -57,7 +57,8 @@ class ProfilePresenter(private val dataInteractor: DataInteractor,
                 .observeOn(co)
                 .map {
                     user.nickname = it.first
-                    user.image = it.second
+                    user.imageByteArray = it.second
+                    user.bitmap = dataInteractor.getBitmapFromByteArray(it.second)
                     return@map user
                 }
                 .flatMapCompletable { user ->

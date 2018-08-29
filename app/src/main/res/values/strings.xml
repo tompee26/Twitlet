@@ -4,6 +4,8 @@
     <string name="app_subtitle">Share your thoughts</string>
 
     <string name="label_positive_button">OK</string>
+    <string name="label_cancel_button">Cancel</string>
+    <string name="label_post_button">Post</string>
 
     <!-- Login screen -->
     <string name="label_login_name">Email</string>
@@ -26,5 +28,19 @@
     <string name="profile_label_save">Create Profile</string>
     <string name="profile_label_picture">Profile Image</string>
     <string name="profile_save_progress">Creating profile…</string>
+
+    <!-- Menu -->
+    <string name="menu_post">Post</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_about">About</string>
+    <string name="menu_license">License</string>
+
+    <string name="message_copyright">Copyright 2018 Tompee. All rights reserved.</string>
+    <string name="message_version">Version %1$s</string>
+    <string name="message_license">Open Source License</string>
+    <string name="message_post">Share your thoughts here</string>
+    <string name="label_about">About</string>
+    <string name="label_license">License</string>
+    <string name="label_post">Create Post</string>
 
 </resources>

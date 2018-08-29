@@ -2,6 +2,7 @@ package com.tompee.twitlet.dependency.component
 
 import android.content.Context
 import com.tompee.twitlet.TwitletApplication
+import com.tompee.twitlet.core.asset.AssetManager
 import com.tompee.twitlet.core.image.ImageProcessor
 import com.tompee.twitlet.dependency.module.AppModule
 import com.tompee.twitlet.dependency.module.AuthModule
@@ -27,6 +28,8 @@ interface AppComponent {
     fun user(): User
 
     fun imageProcessor(): ImageProcessor
+
+    fun assetManager(): AssetManager
     //endregion
 
     //region SchedulerModule

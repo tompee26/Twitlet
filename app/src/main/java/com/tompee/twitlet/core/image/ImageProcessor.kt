@@ -2,6 +2,7 @@ package com.tompee.twitlet.core.image
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import java.io.ByteArrayOutputStream
@@ -17,4 +18,7 @@ class ImageProcessor(private val context: Context) {
         bitmap.recycle()
         return bao.toByteArray()
     }
+
+    fun getBitmapFromByteArray(byteArray: ByteArray): Bitmap =
+            BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 }

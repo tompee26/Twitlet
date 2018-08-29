@@ -2,6 +2,7 @@ package com.tompee.twitlet.dependency.module
 
 import android.content.Context
 import com.tompee.twitlet.TwitletApplication
+import com.tompee.twitlet.core.asset.AssetManager
 import com.tompee.twitlet.core.image.ImageProcessor
 import com.tompee.twitlet.model.User
 import dagger.Module
@@ -26,4 +27,8 @@ class AppModule(private val application: TwitletApplication) {
     @Singleton
     @Provides
     fun provideImageProcessor(): ImageProcessor = ImageProcessor(application)
+
+    @Singleton
+    @Provides
+    fun provideAssetManager(): AssetManager = AssetManager(application)
 }

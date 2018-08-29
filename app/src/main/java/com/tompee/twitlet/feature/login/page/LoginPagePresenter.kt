@@ -118,10 +118,13 @@ class LoginPagePresenter(private val authInteractor: AuthInteractor,
                         }
                         .flatMap { email ->
                             dataInteractor.getUser(email)
-                                    .observeOn(ui)
                                     .doOnSuccess {
                                         user.nickname = it.nickname
-                                        user.image = it.image
+                                        user.imageByteArray = it.imageByteArray
+                                        user.bitmap = dataInteractor.getBitmapFromByteArray(it.imageByteArray)
+                                    }
+                                    .observeOn(ui)
+                                    .doOnSuccess {
                                         view.moveToTimelineScreen()
                                     }
                                     .doOnError { view.moveToProfileScreen() }

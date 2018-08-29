@@ -2,7 +2,10 @@ package com.tompee.twitlet.dependency.module
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.tompee.twitlet.core.asset.AssetManager
+import com.tompee.twitlet.core.database.PostDao
 import com.tompee.twitlet.core.database.UserDao
+import com.tompee.twitlet.core.database.firebase.FirebasePostDao
 import com.tompee.twitlet.core.database.firebase.FirebaseUserDao
 import com.tompee.twitlet.core.image.ImageProcessor
 import com.tompee.twitlet.interactor.DataInteractor
@@ -15,8 +18,11 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideDataInteractor(userDao: UserDao, imageProcessor: ImageProcessor): DataInteractor =
-            DataInteractor(userDao, imageProcessor)
+    fun provideDataInteractor(userDao: UserDao,
+                              postDao: PostDao,
+                              imageProcessor: ImageProcessor,
+                              assetManager: AssetManager): DataInteractor =
+            DataInteractor(userDao, postDao, imageProcessor, assetManager)
 
     @Singleton
     @Provides
@@ -24,7 +30,15 @@ class DataModule {
 
     @Singleton
     @Provides
+    fun providePostDao(firebasePostDao: FirebasePostDao): PostDao = firebasePostDao
+
+    @Singleton
+    @Provides
     fun provideFirebaseUserDao(db: FirebaseFirestore): FirebaseUserDao = FirebaseUserDao(db)
+
+    @Singleton
+    @Provides
+    fun provideFirebasePostDao(db: FirebaseFirestore): FirebasePostDao = FirebasePostDao(db)
 
     @Singleton
     @Provides

@@ -1,11 +1,14 @@
 package com.tompee.twitlet.model
 
+import android.graphics.Bitmap
 import java.util.*
 
 data class User(var email: String = "",
                 var isAuthenticated: Boolean = false,
                 var nickname: String = "",
-                var image: ByteArray = ByteArray(0)) {
+                var imageByteArray: ByteArray = ByteArray(0)) {
+
+    var bitmap: Bitmap? = null
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -16,7 +19,8 @@ data class User(var email: String = "",
         if (email != other.email) return false
         if (isAuthenticated != other.isAuthenticated) return false
         if (nickname != other.nickname) return false
-        if (!Arrays.equals(image, other.image)) return false
+        if (!Arrays.equals(imageByteArray, other.imageByteArray)) return false
+        if (bitmap != other.bitmap) return false
 
         return true
     }
@@ -25,7 +29,8 @@ data class User(var email: String = "",
         var result = email.hashCode()
         result = 31 * result + isAuthenticated.hashCode()
         result = 31 * result + nickname.hashCode()
-        result = 31 * result + Arrays.hashCode(image)
+        result = 31 * result + Arrays.hashCode(imageByteArray)
+        result = 31 * result + (bitmap?.hashCode() ?: 0)
         return result
     }
 }
