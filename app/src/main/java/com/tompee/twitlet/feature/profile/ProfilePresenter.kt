@@ -70,7 +70,7 @@ class ProfilePresenter(private val dataInteractor: DataInteractor,
                             .doOnComplete { view.dismissProgress() }
                             .subscribeOn(io)
                 }
-                .subscribe({ Timber.d("Completed") }) { Timber.e(it) }
+                .subscribe({ Timber.d("Completed") }, Timber::e)
         addSubscription(subscription)
     }
 }

@@ -42,5 +42,6 @@
     <string name="label_about">About</string>
     <string name="label_license">License</string>
     <string name="label_post">Create Post</string>
+    <string name="label_timeline">Timeline</string>
 
 </resources>

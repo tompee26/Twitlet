@@ -1,8 +1,10 @@
 package com.tompee.twitlet.core.database
 
-import com.tompee.twitlet.model.Post
 import io.reactivex.Completable
+import io.reactivex.Observable
 
 interface PostDao {
-    fun savePost(post: Post, user: UserEntity): Completable
+    fun savePost(post: PostEntity, user: UserEntity): Completable
+
+    fun getPosts(user: UserEntity): Observable<List<PostEntity>>
 }

@@ -1,3 +1,5 @@
 package com.tompee.twitlet.model
 
-data class Post(val message: String, val time: String)
+import java.util.*
+
+data class Post(val message: String, val time: Date)

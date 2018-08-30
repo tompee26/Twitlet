@@ -7,7 +7,6 @@ import com.tompee.twitlet.model.User
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.withLatestFrom
 import timber.log.Timber
-import java.text.SimpleDateFormat
 import java.util.*
 
 class PostPresenter(private val dataInteractor: DataInteractor,
@@ -31,11 +30,7 @@ class PostPresenter(private val dataInteractor: DataInteractor,
                 .observeOn(io)
                 .withLatestFrom(view.message()) { _, message -> message }
                 .filter { it.isNotEmpty() }
-                .map {
-                    val time = Calendar.getInstance().time
-                    val format = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
-                    return@map Post(it, format.format(time))
-                }
+                .map { Post(it, Calendar.getInstance().time) }
                 .flatMapCompletable {
                     dataInteractor.savePost(user, it)
                             .observeOn(ui)

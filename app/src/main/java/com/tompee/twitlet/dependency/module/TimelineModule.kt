@@ -1,5 +1,6 @@
 package com.tompee.twitlet.dependency.module
 
+import com.tompee.twitlet.feature.timeline.TimelinePresenter
 import com.tompee.twitlet.feature.timeline.post.PostPresenter
 import com.tompee.twitlet.interactor.DataInteractor
 import com.tompee.twitlet.model.User
@@ -18,4 +19,8 @@ class TimelineModule {
                              @Named("ui") ui: Scheduler): PostPresenter =
             PostPresenter(dataInteractor, user, io, ui)
 
+    @Provides
+    fun provideTimelinePresenter(dataInteractor: DataInteractor,
+                                 user: User): TimelinePresenter =
+            TimelinePresenter(dataInteractor, user)
 }

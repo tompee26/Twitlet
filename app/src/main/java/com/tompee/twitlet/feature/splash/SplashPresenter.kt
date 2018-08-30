@@ -35,7 +35,7 @@ class SplashPresenter(private val authInteractor: AuthInteractor,
                             .subscribeOn(io)
                 }
                 .subscribeOn(io)
-                .subscribe({ Timber.d(it.toString()) }) { Timber.e(it) }
+                .subscribe({ Timber.d(it.toString()) }, Timber::e)
         addSubscription(subscription)
     }
 
