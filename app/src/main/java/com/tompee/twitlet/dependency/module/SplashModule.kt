@@ -1,22 +1,27 @@
 package com.tompee.twitlet.dependency.module
 
+import com.tompee.twitlet.base.Schedulers
+import com.tompee.twitlet.core.auth.Authenticator
+import com.tompee.twitlet.core.database.UserDao
+import com.tompee.twitlet.core.image.ImageProcessor
 import com.tompee.twitlet.feature.splash.SplashPresenter
-import com.tompee.twitlet.interactor.AuthInteractor
-import com.tompee.twitlet.interactor.DataInteractor
+import com.tompee.twitlet.interactor.SplashInteractor
 import com.tompee.twitlet.model.User
 import dagger.Module
 import dagger.Provides
-import io.reactivex.Scheduler
-import javax.inject.Named
 
 @Module
 class SplashModule {
 
     @Provides
-    fun provideSplashPresenter(authInteractor: AuthInteractor,
-                               dataInteractor: DataInteractor,
-                               user: User,
-                               @Named("io") io: Scheduler,
-                               @Named("ui") ui: Scheduler): SplashPresenter =
-            SplashPresenter(authInteractor, dataInteractor, user, io, ui)
+    fun provideSplashPresenter(splashInteractor: SplashInteractor,
+                               schedulers: Schedulers): SplashPresenter =
+            SplashPresenter(splashInteractor, schedulers)
+
+    @Provides
+    fun provideSplashInteractor(authenticator: Authenticator,
+                                userDao: UserDao,
+                                imageProcessor: ImageProcessor,
+                                user: User) =
+            SplashInteractor(authenticator, userDao, imageProcessor, user)
 }

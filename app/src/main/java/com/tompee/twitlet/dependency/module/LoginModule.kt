@@ -1,16 +1,18 @@
 package com.tompee.twitlet.dependency.module
 
 import android.support.v4.app.FragmentActivity
+import com.tompee.twitlet.base.Schedulers
+import com.tompee.twitlet.core.auth.Authenticator
+import com.tompee.twitlet.core.database.UserDao
+import com.tompee.twitlet.core.image.ImageProcessor
 import com.tompee.twitlet.dependency.scope.LoginScope
 import com.tompee.twitlet.feature.login.LoginPageAdapter
 import com.tompee.twitlet.feature.login.page.LoginFragment
 import com.tompee.twitlet.feature.login.page.LoginPagePresenter
-import com.tompee.twitlet.interactor.AuthInteractor
-import com.tompee.twitlet.interactor.DataInteractor
+import com.tompee.twitlet.interactor.LoginInteractor
 import com.tompee.twitlet.model.User
 import dagger.Module
 import dagger.Provides
-import io.reactivex.Scheduler
 import javax.inject.Named
 
 @Module
@@ -33,10 +35,16 @@ class LoginModule(private val fragmentActivity: FragmentActivity) {
             LoginPageAdapter(fragmentActivity.supportFragmentManager, loginFragment, signupFragment)
 
     @Provides
-    fun provideLoginPagePresenter(authInteractor: AuthInteractor,
-                                  dataInteractor: DataInteractor,
-                                  user: User,
-                                  @Named("io") io: Scheduler,
-                                  @Named("ui") ui: Scheduler) =
-            LoginPagePresenter(authInteractor, dataInteractor, user, io, ui)
+    fun provideLoginPagePresenter(loginInteractor: LoginInteractor,
+                                  schedulers: Schedulers) =
+            LoginPagePresenter(loginInteractor, schedulers)
+
+    @LoginScope
+    @Provides
+    fun provideLoginInteractor(authenticator: Authenticator,
+                               imageProcessor: ImageProcessor,
+                               userDao: UserDao,
+                               user: User): LoginInteractor =
+            LoginInteractor(authenticator, imageProcessor, userDao, user)
+
 }

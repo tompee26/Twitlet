@@ -1,26 +1,31 @@
 package com.tompee.twitlet.dependency.module
 
+import com.tompee.twitlet.base.Schedulers
+import com.tompee.twitlet.core.database.PostDao
+import com.tompee.twitlet.dependency.scope.TimelineScope
 import com.tompee.twitlet.feature.timeline.TimelinePresenter
 import com.tompee.twitlet.feature.timeline.post.PostPresenter
-import com.tompee.twitlet.interactor.DataInteractor
+import com.tompee.twitlet.interactor.TimelineInteractor
 import com.tompee.twitlet.model.User
 import dagger.Module
 import dagger.Provides
-import io.reactivex.Scheduler
-import javax.inject.Named
 
 @Module
 class TimelineModule {
 
     @Provides
-    fun providePostPresenter(dataInteractor: DataInteractor,
-                             user: User,
-                             @Named("io") io: Scheduler,
-                             @Named("ui") ui: Scheduler): PostPresenter =
-            PostPresenter(dataInteractor, user, io, ui)
+    fun providePostPresenter(timelineInteractor: TimelineInteractor,
+                             schedulers: Schedulers): PostPresenter =
+            PostPresenter(timelineInteractor, schedulers)
 
     @Provides
-    fun provideTimelinePresenter(dataInteractor: DataInteractor,
-                                 user: User): TimelinePresenter =
-            TimelinePresenter(dataInteractor, user)
+    fun provideTimelinePresenter(timelineInteractor: TimelineInteractor,
+                                 schedulers: Schedulers): TimelinePresenter =
+            TimelinePresenter(timelineInteractor, schedulers)
+
+    @TimelineScope
+    @Provides
+    fun provideTimelineInteractor(postDao: PostDao,
+                                  user: User): TimelineInteractor =
+            TimelineInteractor(postDao, user)
 }

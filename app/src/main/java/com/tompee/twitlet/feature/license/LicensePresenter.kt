@@ -1,18 +1,18 @@
 package com.tompee.twitlet.feature.license
 
 import com.tompee.twitlet.base.BasePresenter
-import com.tompee.twitlet.interactor.DataInteractor
-import io.reactivex.Scheduler
-import io.reactivex.Single
+import com.tompee.twitlet.base.Schedulers
+import com.tompee.twitlet.interactor.LicenseInteractor
 import timber.log.Timber
 
-class LicensePresenter(private val dataInteractor: DataInteractor,
-                       private val io: Scheduler,
-                       private val ui: Scheduler) : BasePresenter<LicenseView>() {
+class LicensePresenter(licenseInteractor: LicenseInteractor,
+                       private val schedulers: Schedulers) :
+        BasePresenter<LicenseView, LicenseInteractor>(licenseInteractor) {
+
     override fun onViewAttached(view: LicenseView) {
-        Single.just(dataInteractor.getContentFromHtmlAsset("opensource.html"))
-                .subscribeOn(io)
-                .observeOn(ui)
+        interactor.getContentFromHtmlAsset("opensource.html")
+                .subscribeOn(schedulers.io)
+                .observeOn(schedulers.ui)
                 .subscribe(view::setLicenseText, Timber::e)
     }
 

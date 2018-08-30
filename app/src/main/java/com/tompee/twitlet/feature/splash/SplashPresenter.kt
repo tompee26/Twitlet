@@ -1,40 +1,27 @@
 package com.tompee.twitlet.feature.splash
 
 import com.tompee.twitlet.base.BasePresenter
-import com.tompee.twitlet.interactor.AuthInteractor
-import com.tompee.twitlet.interactor.DataInteractor
-import com.tompee.twitlet.model.User
-import io.reactivex.Scheduler
+import com.tompee.twitlet.base.Schedulers
+import com.tompee.twitlet.interactor.SplashInteractor
 import timber.log.Timber
 
-class SplashPresenter(private val authInteractor: AuthInteractor,
-                      private val dataInteractor: DataInteractor,
-                      private val user: User,
-                      private val io: Scheduler,
-                      private val ui: Scheduler) : BasePresenter<SplashView>() {
+class SplashPresenter(splashInteractor: SplashInteractor,
+                      private val schedulers: Schedulers) :
+        BasePresenter<SplashView, SplashInteractor>(splashInteractor) {
 
     override fun onViewAttached(view: SplashView) {
-        val subscription = authInteractor.getCurrentUser()
-                .doOnSuccess {
-                    user.email = it
-                    user.isAuthenticated = true
-                }
-                .observeOn(ui)
+        val subscription = interactor.getCurrentUser()
+                .observeOn(schedulers.ui)
                 .doOnError { view.moveToLoginScreen() }
-                .observeOn(io)
+                .observeOn(schedulers.io)
                 .flatMap { email ->
-                    dataInteractor.getUser(email)
-                            .doOnSuccess {
-                                user.nickname = it.nickname
-                                user.imageByteArray = it.imageByteArray
-                                user.bitmap = dataInteractor.getBitmapFromByteArray(it.imageByteArray)
-                            }
-                            .observeOn(ui)
+                    interactor.getUserInfo(email)
+                            .observeOn(schedulers.ui)
                             .doOnSuccess { view.moveToTimelineScreen() }
                             .doOnError { view.moveToProfileScreen() }
-                            .subscribeOn(io)
+                            .subscribeOn(schedulers.io)
                 }
-                .subscribeOn(io)
+                .subscribeOn(schedulers.io)
                 .subscribe({ Timber.d(it.toString()) }, Timber::e)
         addSubscription(subscription)
     }

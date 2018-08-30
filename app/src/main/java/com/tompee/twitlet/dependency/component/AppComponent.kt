@@ -2,18 +2,18 @@ package com.tompee.twitlet.dependency.component
 
 import android.content.Context
 import com.tompee.twitlet.TwitletApplication
+import com.tompee.twitlet.base.Schedulers
 import com.tompee.twitlet.core.asset.AssetManager
+import com.tompee.twitlet.core.auth.Authenticator
+import com.tompee.twitlet.core.database.PostDao
+import com.tompee.twitlet.core.database.UserDao
 import com.tompee.twitlet.core.image.ImageProcessor
 import com.tompee.twitlet.dependency.module.AppModule
 import com.tompee.twitlet.dependency.module.AuthModule
 import com.tompee.twitlet.dependency.module.DataModule
 import com.tompee.twitlet.dependency.module.SchedulerModule
-import com.tompee.twitlet.interactor.AuthInteractor
-import com.tompee.twitlet.interactor.DataInteractor
 import com.tompee.twitlet.model.User
 import dagger.Component
-import io.reactivex.Scheduler
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
@@ -33,17 +33,17 @@ interface AppComponent {
     //endregion
 
     //region SchedulerModule
-    @Named("io")
-    fun ioScheduler(): Scheduler
-
-    @Named("ui")
-    fun uiScheduler(): Scheduler
-
-    @Named("co")
-    fun computationScheduler(): Scheduler
+    fun schedulers(): Schedulers
     //endregion
 
-    fun authInteractor(): AuthInteractor
+    //region AuthModule
+    fun authenticator(): Authenticator
+    //endregion
 
-    fun dataInteractor(): DataInteractor
+    //region DataModule
+    fun userDao(): UserDao
+
+    fun postDao(): PostDao
+
+    //endregion
 }

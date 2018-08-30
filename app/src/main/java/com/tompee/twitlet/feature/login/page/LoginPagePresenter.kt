@@ -3,21 +3,18 @@ package com.tompee.twitlet.feature.login.page
 import android.util.Patterns
 import com.tompee.twitlet.Constants.MIN_PASS_COUNT
 import com.tompee.twitlet.base.BasePresenter
-import com.tompee.twitlet.interactor.AuthInteractor
-import com.tompee.twitlet.interactor.DataInteractor
+import com.tompee.twitlet.base.Schedulers
+import com.tompee.twitlet.interactor.LoginInteractor
 import com.tompee.twitlet.model.User
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.withLatestFrom
 import java.util.concurrent.TimeUnit
 
-class LoginPagePresenter(private val authInteractor: AuthInteractor,
-                         private val dataInteractor: DataInteractor,
-                         private val user: User,
-                         private val io: Scheduler,
-                         private val ui: Scheduler) : BasePresenter<LoginPageView>() {
+class LoginPagePresenter(loginInteractor: LoginInteractor,
+                         private val schedulers: Schedulers) : BasePresenter<LoginPageView, LoginInteractor>(loginInteractor) {
+
     enum class InputError {
         EMAIL_EMPTY,
         EMAIL_INVALID,
@@ -56,11 +53,11 @@ class LoginPagePresenter(private val authInteractor: AuthInteractor,
 
         addSubscription(emailError
                 .debounce(1, TimeUnit.SECONDS)
-                .observeOn(ui)
+                .observeOn(schedulers.ui)
                 .subscribe(this::showError))
         addSubscription(passError
                 .debounce(1, TimeUnit.SECONDS)
-                .observeOn(ui)
+                .observeOn(schedulers.ui)
                 .subscribe(this::showError))
 
         return Observables.combineLatest(
@@ -89,49 +86,40 @@ class LoginPagePresenter(private val authInteractor: AuthInteractor,
 
     private fun setupCommandHandler(inputError: Observable<InputError>) {
         val command = view.command().withLatestFrom(inputError) { _, error -> error }
-                .observeOn(ui)
+                .observeOn(schedulers.ui)
                 .doOnNext(this::showError)
                 .filter { it == InputError.BOTH_OK }
                 .doOnNext { view.showProgressDialog() }
                 .withLatestFrom(view.getEmail(), view.getPassword()) { _, email, pass -> Pair(email, pass) }
         if (view.getViewType() == LoginFragment.SIGN_UP) {
             addSubscription(command.flatMapCompletable { pair ->
-                authInteractor.signup(pair.first, pair.second)
-                        .observeOn(ui)
+                interactor.signup(pair.first, pair.second)
+                        .observeOn(schedulers.ui)
                         .doOnComplete(view::showSignupSuccessMessage)
                         .doOnError { view.showError(it.message ?: "Error occurred") }
                         .onErrorComplete()
                         .doOnComplete(view::dismissProgressDialog)
-                        .subscribeOn(io)
+                        .subscribeOn(schedulers.io)
             }.subscribe())
         } else {
             addSubscription(command.flatMapSingle { pair ->
-                authInteractor.login(pair.first, pair.second)
-                        .observeOn(ui)
+                interactor.login(pair.first, pair.second)
+                        .observeOn(schedulers.ui)
                         .doOnError {
                             view.showError(it.message ?: "Error occurred")
                             view.dismissProgressDialog()
                         }
-                        .doOnSuccess {
-                            user.email = it
-                            user.isAuthenticated = true
-                        }
                         .flatMap { email ->
-                            dataInteractor.getUser(email)
-                                    .doOnSuccess {
-                                        user.nickname = it.nickname
-                                        user.imageByteArray = it.imageByteArray
-                                        user.bitmap = dataInteractor.getBitmapFromByteArray(it.imageByteArray)
-                                    }
-                                    .observeOn(ui)
+                            interactor.getUserInfo(email)
+                                    .observeOn(schedulers.ui)
                                     .doOnSuccess {
                                         view.moveToTimelineScreen()
                                     }
                                     .doOnError { view.moveToProfileScreen() }
                                     .onErrorResumeNext(Single.just(User()))
-                                    .subscribeOn(io)
+                                    .subscribeOn(schedulers.io)
                         }
-                        .subscribeOn(io)
+                        .subscribeOn(schedulers.io)
             }.subscribe())
         }
     }

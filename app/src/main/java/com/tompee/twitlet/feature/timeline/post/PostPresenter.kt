@@ -1,18 +1,17 @@
 package com.tompee.twitlet.feature.timeline.post
 
 import com.tompee.twitlet.base.BasePresenter
-import com.tompee.twitlet.interactor.DataInteractor
+import com.tompee.twitlet.base.Schedulers
+import com.tompee.twitlet.interactor.TimelineInteractor
 import com.tompee.twitlet.model.Post
-import com.tompee.twitlet.model.User
-import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.withLatestFrom
 import timber.log.Timber
 import java.util.*
 
-class PostPresenter(private val dataInteractor: DataInteractor,
-                    private val user: User,
-                    private val io: Scheduler,
-                    private val ui: Scheduler) : BasePresenter<PostView>() {
+class PostPresenter(timelineInteractor: TimelineInteractor,
+                    private val schedulers: Schedulers) :
+        BasePresenter<PostView, TimelineInteractor>(timelineInteractor) {
+
     override fun onViewAttached(view: PostView) {
         displayUserInfo()
         setupPostHandler()
@@ -22,18 +21,19 @@ class PostPresenter(private val dataInteractor: DataInteractor,
     }
 
     private fun displayUserInfo() {
-        view.setUser(user)
+        interactor.getUser()
+                .subscribe(view::setUser)
     }
 
     private fun setupPostHandler() {
         view.post()
-                .observeOn(io)
+                .observeOn(schedulers.io)
                 .withLatestFrom(view.message()) { _, message -> message }
                 .filter { it.isNotEmpty() }
                 .map { Post(it, Calendar.getInstance().time) }
                 .flatMapCompletable {
-                    dataInteractor.savePost(user, it)
-                            .observeOn(ui)
+                    interactor.savePost(it)
+                            .observeOn(schedulers.ui)
                             .doOnComplete { view.dismiss() }
                 }
                 .subscribe({ Timber.d("completed") }, Timber::e)
