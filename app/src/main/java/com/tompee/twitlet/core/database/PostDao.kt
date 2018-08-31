@@ -6,5 +6,5 @@ import io.reactivex.Observable
 interface PostDao {
     fun savePost(post: PostEntity, user: UserEntity): Completable
 
-    fun getPosts(user: UserEntity): Observable<List<PostEntity>>
+    fun getPosts(): Observable<List<PostEntity>>
 }

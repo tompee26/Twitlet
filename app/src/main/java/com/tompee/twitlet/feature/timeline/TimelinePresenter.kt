@@ -9,11 +9,21 @@ class TimelinePresenter(timelineInteractor: TimelineInteractor,
         BasePresenter<TimelineView, TimelineInteractor>(timelineInteractor) {
 
     override fun onViewAttached(view: TimelineView) {
-//        interactor.getPosts()
-//                .map { TimelineAdapter(it, user) }
-//                .subscribe { view.setAdapter(it) }
+        setUserProfile()
+        populateTimeline()
     }
 
     override fun onViewDetached() {
+    }
+
+    private fun setUserProfile() {
+        interactor.getUser()
+                .subscribe(view::setUser)
+    }
+
+    private fun populateTimeline() {
+        interactor.getPosts()
+                .map { TimelineAdapter(it) }
+                .subscribe { view.setAdapter(it) }
     }
 }

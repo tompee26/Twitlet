@@ -3,7 +3,7 @@ package com.tompee.twitlet.feature.timeline.post
 import com.tompee.twitlet.base.BasePresenter
 import com.tompee.twitlet.base.Schedulers
 import com.tompee.twitlet.interactor.TimelineInteractor
-import com.tompee.twitlet.model.Post
+import com.tompee.twitlet.model.Message
 import io.reactivex.rxkotlin.withLatestFrom
 import timber.log.Timber
 import java.util.*
@@ -30,9 +30,9 @@ class PostPresenter(timelineInteractor: TimelineInteractor,
                 .observeOn(schedulers.io)
                 .withLatestFrom(view.message()) { _, message -> message }
                 .filter { it.isNotEmpty() }
-                .map { Post(it, Calendar.getInstance().time) }
+                .map { Message(it, Calendar.getInstance().time) }
                 .flatMapCompletable {
-                    interactor.savePost(it)
+                    interactor.saveMessage(it)
                             .observeOn(schedulers.ui)
                             .doOnComplete { view.dismiss() }
                 }

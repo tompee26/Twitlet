@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.tompee.twitlet.R
 import com.tompee.twitlet.model.Post
-import com.tompee.twitlet.model.User
 import kotlinx.android.synthetic.main.list_post.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
-class TimelineAdapter(private val postList: List<Post>,
-                      private val user: User) : RecyclerView.Adapter<TimelineAdapter.TimelineViewHolder>() {
+class TimelineAdapter(private val postList: List<Post>) : RecyclerView.Adapter<TimelineAdapter.TimelineViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineViewHolder =
             TimelineViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_post, parent, false))
 
@@ -21,9 +21,10 @@ class TimelineAdapter(private val postList: List<Post>,
 
     inner class TimelineViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(post: Post) {
-            view.profileImage.setImageBitmap(user.bitmap)
-            view.name.text = user.nickname
-            view.email.text = user.email
+            val format = SimpleDateFormat("MMM dd hh:mmaa", Locale.getDefault())
+            view.name.text = post.user.nickname
+            view.time.text = format.format(post.message.time)
+            view.messageBox.text = post.message.message
         }
     }
 }

@@ -14,7 +14,9 @@ import com.tompee.twitlet.dependency.module.TimelineModule
 import com.tompee.twitlet.feature.about.AboutActivity
 import com.tompee.twitlet.feature.license.LicenseActivity
 import com.tompee.twitlet.feature.timeline.post.PostDialog
+import com.tompee.twitlet.model.User
 import kotlinx.android.synthetic.main.activity_timeline.*
+import kotlinx.android.synthetic.main.timeline_profile.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
@@ -30,7 +32,6 @@ class TimelineActivity : BaseActivity(), TimelineView {
             setDisplayHomeAsUpEnabled(false)
             setDisplayShowTitleEnabled(false)
         }
-        toolbar_text.setText(R.string.label_timeline)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
@@ -82,5 +83,14 @@ class TimelineActivity : BaseActivity(), TimelineView {
     override fun setAdapter(adapter: TimelineAdapter) {
         recyclerView.adapter = adapter
     }
+
+    override fun setUser(user: User) {
+        user.bitmap?.let {
+            profileImage.setImageBitmap(it)
+        }
+        name.text = user.nickname
+        email.text = user.email
+    }
+
     //endregion
 }
