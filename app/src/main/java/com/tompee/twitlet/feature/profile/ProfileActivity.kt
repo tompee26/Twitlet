@@ -68,7 +68,8 @@ class ProfileActivity : BaseActivity(), ProfileView {
     //region ProfileView
     override fun profileImageRequest(): Observable<Any> = RxView.clicks(circularImageView)
 
-    override fun photoUrl(): Observable<Uri> = imageSubject
+    override fun photoUrl(): Observable<String> = imageSubject
+            .map { it.toString() }
 
     override fun nickname(): Observable<String> = RxTextView.textChanges(nickname)
             .skipInitialValue()

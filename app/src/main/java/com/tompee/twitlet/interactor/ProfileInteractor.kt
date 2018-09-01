@@ -1,32 +1,38 @@
 package com.tompee.twitlet.interactor
 
-import android.graphics.Bitmap
 import android.net.Uri
-import android.util.Base64
 import com.tompee.twitlet.base.BaseInteractor
 import com.tompee.twitlet.core.database.UserDao
 import com.tompee.twitlet.core.database.UserEntity
-import com.tompee.twitlet.core.image.ImageProcessor
+import com.tompee.twitlet.core.storage.Storage
 import com.tompee.twitlet.model.User
 import io.reactivex.Completable
 
-class ProfileInteractor(private val imageProcessor: ImageProcessor,
-                        private val userDao: UserDao,
+class ProfileInteractor(private val userDao: UserDao,
+                        private val storage: Storage,
                         private val loggedInUser: User) : BaseInteractor {
 
-    fun getBitmapFromUri(uri: Uri): Bitmap = imageProcessor.getBitmapFromUri(uri)
+    fun saveUser(name: String, url: String): Completable {
+        return if (url.isNotEmpty()) {
+            storage.uploadProfileImage(loggedInUser.email, Uri.parse(url))
+                    .doOnSuccess { newUrl ->
+                        loggedInUser.apply {
+                            nickname = name
+                            imageUrl = newUrl
+                        }
+                    }
+                    .flatMapCompletable {
+                        userDao.saveUser(UserEntity(loggedInUser.email, name, it))
+                    }
 
-    fun getByteArrayFromBitmap(bitmap: Bitmap) = imageProcessor.getByteStreamFromBitmap(bitmap)
-
-    fun saveUser(user: User): Completable {
-        return userDao.saveUser(UserEntity(user.email, user.nickname,
-                Base64.encodeToString(user.imageByteArray, Base64.DEFAULT)))
+        } else {
+            userDao.saveUser(UserEntity(loggedInUser.email, name, url))
+                    .doOnComplete {
+                        loggedInUser.apply {
+                            nickname = name
+                            imageUrl = url
+                        }
+                    }
+        }
     }
-
-    fun updateLoggedInUser(name: String, image: ByteArray) =
-            loggedInUser.apply {
-                nickname = name
-                imageByteArray = image
-                bitmap = if (image.isEmpty()) null else imageProcessor.getBitmapFromByteArray(image)
-            }
 }

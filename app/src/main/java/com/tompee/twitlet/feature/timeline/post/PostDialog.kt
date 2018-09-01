@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.squareup.picasso.Picasso
 import com.tompee.twitlet.R
 import com.tompee.twitlet.TwitletApplication
 import com.tompee.twitlet.base.BaseDialogFragment
@@ -70,8 +71,10 @@ class PostDialog : BaseDialogFragment(), PostView {
             .map { it.toString() }
 
     override fun setUser(user: User) {
-        user.bitmap?.let {
-            customView.profileImage.setImageBitmap(it)
+        if (user.imageUrl.isNotEmpty()) {
+            Picasso.get()
+                    .load(user.imageUrl)
+                    .into(customView.profileImage)
         }
         customView.name.text = user.nickname
         customView.email.text = user.email

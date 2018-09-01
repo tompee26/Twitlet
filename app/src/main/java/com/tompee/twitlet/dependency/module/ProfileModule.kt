@@ -2,7 +2,7 @@ package com.tompee.twitlet.dependency.module
 
 import com.tompee.twitlet.base.Schedulers
 import com.tompee.twitlet.core.database.UserDao
-import com.tompee.twitlet.core.image.ImageProcessor
+import com.tompee.twitlet.core.storage.Storage
 import com.tompee.twitlet.feature.profile.ProfilePresenter
 import com.tompee.twitlet.interactor.ProfileInteractor
 import com.tompee.twitlet.model.User
@@ -18,8 +18,8 @@ class ProfileModule {
             ProfilePresenter(profileInteractor, schedulers)
 
     @Provides
-    fun provideProfileInteractor(imageProcessor: ImageProcessor,
-                                 userDao: UserDao,
+    fun provideProfileInteractor(userDao: UserDao,
+                                 storage: Storage,
                                  user: User): ProfileInteractor =
-            ProfileInteractor(imageProcessor, userDao, user)
+            ProfileInteractor(userDao, storage, user)
 }

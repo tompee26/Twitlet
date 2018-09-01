@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.view.RxView
+import com.squareup.picasso.Picasso
 import com.tompee.twitlet.R
 import com.tompee.twitlet.TwitletApplication
 import com.tompee.twitlet.base.BaseActivity
@@ -97,8 +98,10 @@ class TimelineActivity : BaseActivity(), TimelineView {
     }
 
     override fun setUser(user: User) {
-        user.bitmap?.let {
-            profileImage.setImageBitmap(it)
+        if (user.imageUrl.isNotEmpty()) {
+            Picasso.get()
+                    .load(user.imageUrl)
+                    .into(profileImage)
         }
         name.text = user.nickname
         email.text = user.email

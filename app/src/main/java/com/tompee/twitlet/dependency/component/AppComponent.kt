@@ -7,7 +7,7 @@ import com.tompee.twitlet.core.asset.AssetManager
 import com.tompee.twitlet.core.auth.Authenticator
 import com.tompee.twitlet.core.database.PostDao
 import com.tompee.twitlet.core.database.UserDao
-import com.tompee.twitlet.core.image.ImageProcessor
+import com.tompee.twitlet.core.storage.Storage
 import com.tompee.twitlet.dependency.module.AppModule
 import com.tompee.twitlet.dependency.module.AuthModule
 import com.tompee.twitlet.dependency.module.DataModule
@@ -27,8 +27,6 @@ interface AppComponent {
 
     fun user(): User
 
-    fun imageProcessor(): ImageProcessor
-
     fun assetManager(): AssetManager
     //endregion
 
@@ -44,6 +42,8 @@ interface AppComponent {
     fun userDao(): UserDao
 
     fun postDao(): PostDao
+
+    fun storage(): Storage
 
     //endregion
 }

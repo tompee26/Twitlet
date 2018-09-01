@@ -35,11 +35,9 @@ class ProfilePresenter(profileInteractor: ProfileInteractor,
     }
 
     private fun setupProfileSave() {
-        val imageStream = Observable.just(ByteArray(0))
+        val imageStream = Observable.just("")
                 .concatWith(view.photoUrl()
                         .observeOn(schedulers.computation)
-                        .map { interactor.getBitmapFromUri(it) }
-                        .map { interactor.getByteArrayFromBitmap(it) }
                 )
 
         val subscription = view.saveProfile()
@@ -53,9 +51,8 @@ class ProfilePresenter(profileInteractor: ProfileInteractor,
                 .observeOn(schedulers.ui)
                 .doOnNext { view.showProgress() }
                 .observeOn(schedulers.computation)
-                .map { interactor.updateLoggedInUser(it.first, it.second) }
-                .flatMapCompletable { user ->
-                    interactor.saveUser(user)
+                .flatMapCompletable { pair ->
+                    interactor.saveUser(pair.first, pair.second)
                             .observeOn(schedulers.ui)
                             .doOnComplete { view.moveToTimelineScreen() }
                             .doOnError { view.showError(it.message ?: "Error encountered") }

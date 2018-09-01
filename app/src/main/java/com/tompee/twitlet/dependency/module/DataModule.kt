@@ -6,12 +6,23 @@ import com.tompee.twitlet.core.database.PostDao
 import com.tompee.twitlet.core.database.UserDao
 import com.tompee.twitlet.core.database.firebase.FirebasePostDao
 import com.tompee.twitlet.core.database.firebase.FirebaseUserDao
+import com.tompee.twitlet.core.storage.FirebaseStorage
+import com.tompee.twitlet.core.storage.Storage
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
 class DataModule {
+
+    @Singleton
+    @Provides
+    fun provideStorage(firebaseStorage: FirebaseStorage): Storage = firebaseStorage
+
+    @Singleton
+    @Provides
+    fun provideCustomFirebaseStorage(firebaseStorage: com.google.firebase.storage.FirebaseStorage):
+            FirebaseStorage = FirebaseStorage(firebaseStorage)
 
     @Singleton
     @Provides
@@ -39,4 +50,9 @@ class DataModule {
         reference.firestoreSettings = settings
         return reference
     }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseStorage(): com.google.firebase.storage.FirebaseStorage =
+            com.google.firebase.storage.FirebaseStorage.getInstance()
 }

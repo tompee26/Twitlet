@@ -6,7 +6,7 @@ import io.reactivex.Observable
 
 interface ProfileView : BaseView {
     fun profileImageRequest(): Observable<Any>
-    fun photoUrl(): Observable<Uri>
+    fun photoUrl(): Observable<String>
     fun nickname(): Observable<String>
     fun saveProfile(): Observable<Any>
 

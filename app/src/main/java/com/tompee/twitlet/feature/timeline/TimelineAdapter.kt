@@ -4,9 +4,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.squareup.picasso.Picasso
 import com.tompee.twitlet.R
 import com.tompee.twitlet.model.Post
 import kotlinx.android.synthetic.main.list_post.view.*
+import kotlinx.android.synthetic.main.timeline_profile.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,8 +27,11 @@ class TimelineAdapter(private val postList: List<Post>) : RecyclerView.Adapter<T
             view.name.text = post.user.nickname
             view.time.text = format.format(post.message.time)
             view.messageBox.text = post.message.message
-            if (post.user.bitmap != null) {
-                view.profileImage.setImageBitmap(post.user.bitmap)
+
+            if (post.user.imageUrl.isNotEmpty()) {
+                Picasso.get()
+                        .load(post.user.imageUrl)
+                        .into(view.profileImage)
             } else {
                 view.profileImage.setImageResource(R.drawable.ic_account_circle_primary)
             }
