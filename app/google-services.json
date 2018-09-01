@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "450275828152-rsg3tasdcqtpba5fcpjd8bmkdj7jnle0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tompee.twitlet",
+            "certificate_hash": "ea2b0548cb4a60ed7ff96076f22b6b8b437e6c3c"
+          }
+        },
+        {
+          "client_id": "450275828152-ik1t0taaf2qf6oh61jg6qjmmvajk8rj6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tompee.twitlet",
+            "certificate_hash": "c0f3e3a6bcbae8623f9cd9b18a5525b003c95339"
+          }
+        },
+        {
           "client_id": "450275828152-bb7qmudj014rb3gjgt9eg0cecu31cc6t.apps.googleusercontent.com",
           "client_type": 3
         }
