@@ -3,6 +3,8 @@ package com.tompee.twitlet.dependency.module
 import com.tompee.twitlet.base.Schedulers
 import com.tompee.twitlet.core.auth.Authenticator
 import com.tompee.twitlet.core.database.PostDao
+import com.tompee.twitlet.core.database.UserDao
+import com.tompee.twitlet.core.image.ImageProcessor
 import com.tompee.twitlet.dependency.scope.TimelineScope
 import com.tompee.twitlet.feature.timeline.TimelinePresenter
 import com.tompee.twitlet.feature.timeline.logout.LogoutPresenter
@@ -32,7 +34,9 @@ class TimelineModule {
     @TimelineScope
     @Provides
     fun provideTimelineInteractor(postDao: PostDao,
+                                  userDao: UserDao,
                                   authenticator: Authenticator,
+                                  imageProcessor: ImageProcessor,
                                   user: User): TimelineInteractor =
-            TimelineInteractor(postDao, authenticator, user)
+            TimelineInteractor(postDao, userDao, authenticator, imageProcessor, user)
 }

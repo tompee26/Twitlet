@@ -32,6 +32,7 @@ project.ext {
     rxBinding = "2.1.1"
     dagger = "2.14.1"
     firebase = "16.0.3"
+    firestorage = "16.0.1"
     firestore = "17.1.0"
     multidex = "1.0.3"
     timber = "4.7.1"
@@ -62,6 +63,7 @@ dependencies {
 
     implementation "com.google.firebase:firebase-core:$project.firebase"
     implementation "com.google.firebase:firebase-auth:$project.firebase"
+    implementation "com.google.firebase:firebase-storage:$project.firestorage"
     implementation "com.google.firebase:firebase-firestore:$project.firestore"
 
     implementation "com.jakewharton.timber:timber:$project.timber"

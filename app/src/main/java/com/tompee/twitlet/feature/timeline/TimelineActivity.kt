@@ -2,7 +2,6 @@ package com.tompee.twitlet.feature.timeline
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -39,7 +38,7 @@ class TimelineActivity : BaseActivity(), TimelineView {
         }
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+        recyclerView.addItemDecoration(DividerDecorator(20))
         RxView.clicks(addPost)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe {

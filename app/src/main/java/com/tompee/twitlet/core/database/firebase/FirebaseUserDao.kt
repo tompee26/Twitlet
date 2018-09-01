@@ -25,6 +25,12 @@ class FirebaseUserDao(private val db: FirebaseFirestore) : UserDao {
         }
     }
 
+    override fun getUserImage(email: String): Single<String> {
+        return getUser(email)
+                .map { it.image }
+    }
+
+
     override fun saveUser(userEntity: UserEntity): Completable {
         return Completable.create { emitter ->
             db.collection(PROFILE).document(userEntity.email).set(userEntity)

@@ -21,10 +21,15 @@ class TimelineAdapter(private val postList: List<Post>) : RecyclerView.Adapter<T
 
     inner class TimelineViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(post: Post) {
-            val format = SimpleDateFormat("MMM dd hh:mmaa", Locale.getDefault())
+            val format = SimpleDateFormat("MMM d 'at' h:mmaa", Locale.getDefault())
             view.name.text = post.user.nickname
             view.time.text = format.format(post.message.time)
             view.messageBox.text = post.message.message
+            if (post.user.bitmap != null) {
+                view.profileImage.setImageBitmap(post.user.bitmap)
+            } else {
+                view.profileImage.setImageResource(R.drawable.ic_account_circle_primary)
+            }
         }
     }
 }
