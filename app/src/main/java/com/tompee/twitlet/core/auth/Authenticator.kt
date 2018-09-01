@@ -9,4 +9,6 @@ interface Authenticator {
     fun signup(email: String, password: String): Completable
 
     fun login(email: String, password: String): Single<String>
+
+    fun logout() : Completable
 }

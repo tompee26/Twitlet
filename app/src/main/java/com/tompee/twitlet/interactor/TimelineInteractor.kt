@@ -1,6 +1,7 @@
 package com.tompee.twitlet.interactor
 
 import com.tompee.twitlet.base.BaseInteractor
+import com.tompee.twitlet.core.auth.Authenticator
 import com.tompee.twitlet.core.database.PostDao
 import com.tompee.twitlet.core.database.PostEntity
 import com.tompee.twitlet.core.database.UserEntity
@@ -14,6 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TimelineInteractor(private val postDao: PostDao,
+                         private val authenticator: Authenticator,
                          private val loggedInUser: User) : BaseInteractor {
     companion object {
         private const val DATE_TIME_FORMAT = "yyyyMMddHHmmss"
@@ -40,4 +42,10 @@ class TimelineInteractor(private val postDao: PostDao,
                         .toList()
                         .toObservable()
             }
+
+    fun logout(): Completable =
+            authenticator.logout()
+                    .doOnComplete {
+                        loggedInUser.isAuthenticated = false
+                    }
 }

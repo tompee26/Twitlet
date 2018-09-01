@@ -49,4 +49,10 @@ class FirebaseAuthenticator(private val firebaseAuth: FirebaseAuth) : Authentica
                     }
                 }
             }
+
+    override fun logout(): Completable =
+            Completable.create { emitter ->
+                firebaseAuth.signOut()
+                emitter.onComplete()
+            }
 }
