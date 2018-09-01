@@ -116,9 +116,9 @@ class LoginPagePresenter(loginInteractor: LoginInteractor,
                                         view.moveToTimelineScreen()
                                     }
                                     .doOnError { view.moveToProfileScreen() }
-                                    .onErrorResumeNext(Single.just(User()))
                                     .subscribeOn(schedulers.io)
                         }
+                        .onErrorResumeNext(Single.just(User()))
                         .subscribeOn(schedulers.io)
             }.subscribe())
         }
