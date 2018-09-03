@@ -4,7 +4,6 @@ import com.tompee.twitlet.base.BaseInteractor
 import com.tompee.twitlet.core.auth.Authenticator
 import com.tompee.twitlet.core.database.PostDao
 import com.tompee.twitlet.core.database.PostEntity
-import com.tompee.twitlet.core.database.UserDao
 import com.tompee.twitlet.core.database.UserEntity
 import com.tompee.twitlet.model.Message
 import com.tompee.twitlet.model.Post
@@ -36,13 +35,16 @@ class TimelineInteractor(private val postDao: PostDao,
                 Observable.fromIterable(list)
                         .map {
                             val format = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
-                            val message = Message(it.message, format.parse(it.time))
-                            val user = User(email = it.email, nickname = it.name, imageUrl = it.image)
+                            val message = Message(it.time, it.message, format.parse(it.time))
+                            val user = User(it.email, it.email == loggedInUser.email,
+                                    it.name, it.image)
                             return@map Post(message, user)
                         }
                         .toList()
                         .toObservable()
             }
+
+    fun deletePost(postId: String): Completable = postDao.deletePost(postId)
 
     fun logout(): Completable =
             authenticator.logout()

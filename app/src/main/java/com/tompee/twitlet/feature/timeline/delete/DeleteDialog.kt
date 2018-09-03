@@ -1,40 +1,42 @@
-package com.tompee.twitlet.feature.timeline.logout
+package com.tompee.twitlet.feature.timeline.delete
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import com.tompee.twitlet.R
 import com.tompee.twitlet.TwitletApplication
 import com.tompee.twitlet.base.BaseDialogFragment
 import com.tompee.twitlet.dependency.component.DaggerTimelineComponent
 import com.tompee.twitlet.dependency.module.TimelineModule
-import com.tompee.twitlet.feature.login.LoginActivity
-import com.tompee.twitlet.feature.timeline.post.PostView
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-class LogoutDialog : BaseDialogFragment(), LogoutView {
+class DeleteDialog : BaseDialogFragment(), DeleteView {
 
     @Inject
-    lateinit var logoutPresenter: LogoutPresenter
-    private val logoutSubject = PublishSubject.create<Any>()
+    lateinit var deletePresenter: DeletePresenter
+    private val deleteSubject = PublishSubject.create<Any>()
 
     companion object {
-        fun newInstance(): LogoutDialog {
-            return LogoutDialog()
+        private const val TAG_POST_ID = "postId"
+
+        fun newInstance(postId: String): DeleteDialog {
+            val dialog = DeleteDialog()
+            val bundle = Bundle()
+            bundle.putString(TAG_POST_ID, postId)
+            dialog.arguments = bundle
+            return dialog
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        logoutPresenter.attachView(this)
+        deletePresenter.attachView(this)
         return AlertDialog.Builder(activity!!)
-                .setTitle(R.string.label_logout)
-                .setMessage(R.string.message_logout)
+                .setTitle(R.string.label_delete)
+                .setMessage(R.string.message_delete)
                 .setCancelable(false)
-                .setPositiveButton(R.string.label_logout_button) { _, _ -> }
+                .setPositiveButton(R.string.label_delete_button) { _, _ -> }
                 .setNegativeButton(R.string.label_cancel_button) { dialog, _ ->
                     dialog.dismiss()
                 }
@@ -45,13 +47,13 @@ class LogoutDialog : BaseDialogFragment(), LogoutView {
         super.onResume()
         val button = (dialog as AlertDialog).getButton(Dialog.BUTTON_POSITIVE)
         button.setOnClickListener {
-            logoutSubject.onNext(it)
+            deleteSubject.onNext(it)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        logoutPresenter.detachView()
+        deletePresenter.detachView()
     }
 
     override fun setupComponent() {
@@ -62,15 +64,9 @@ class LogoutDialog : BaseDialogFragment(), LogoutView {
                 .inject(this)
     }
 
-    //region PostView
-    override fun logout(): Observable<Any> = logoutSubject
+    //region DeleteView
+    override fun delete(): Observable<Any> = deleteSubject
 
-    override fun moveToLoginScreen() {
-        val intent = Intent(activity, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        activity?.startActivity(intent)
-        activity?.finish()
-    }
-
+    override fun postId(): String = arguments?.getString(TAG_POST_ID)!!
     //endregion
 }

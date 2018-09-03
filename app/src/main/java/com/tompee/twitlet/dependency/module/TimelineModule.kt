@@ -1,11 +1,13 @@
 package com.tompee.twitlet.dependency.module
 
+import android.support.v4.app.FragmentManager
 import com.tompee.twitlet.base.Schedulers
 import com.tompee.twitlet.core.auth.Authenticator
 import com.tompee.twitlet.core.database.PostDao
-import com.tompee.twitlet.core.database.UserDao
 import com.tompee.twitlet.dependency.scope.TimelineScope
+import com.tompee.twitlet.feature.timeline.TimelineAdapter
 import com.tompee.twitlet.feature.timeline.TimelinePresenter
+import com.tompee.twitlet.feature.timeline.delete.DeletePresenter
 import com.tompee.twitlet.feature.timeline.logout.LogoutPresenter
 import com.tompee.twitlet.feature.timeline.post.PostPresenter
 import com.tompee.twitlet.interactor.TimelineInteractor
@@ -14,7 +16,12 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class TimelineModule {
+class TimelineModule(private val fragmentManager: FragmentManager) {
+    @Provides
+    fun provideDeletePresenter(timelineInteractor: TimelineInteractor,
+                               schedulers: Schedulers): DeletePresenter =
+            DeletePresenter(timelineInteractor, schedulers)
+
     @Provides
     fun provideLogoutPresenter(timelineInteractor: TimelineInteractor,
                                schedulers: Schedulers): LogoutPresenter =
@@ -27,8 +34,12 @@ class TimelineModule {
 
     @Provides
     fun provideTimelinePresenter(timelineInteractor: TimelineInteractor,
+                                 timelineAdapter: TimelineAdapter,
                                  schedulers: Schedulers): TimelinePresenter =
-            TimelinePresenter(timelineInteractor, schedulers)
+            TimelinePresenter(timelineInteractor, schedulers, timelineAdapter)
+
+    @Provides
+    fun provideTimelineAdapter(): TimelineAdapter = TimelineAdapter(fragmentManager)
 
     @TimelineScope
     @Provides

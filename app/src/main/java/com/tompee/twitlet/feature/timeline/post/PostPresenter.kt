@@ -30,7 +30,7 @@ class PostPresenter(timelineInteractor: TimelineInteractor,
                 .observeOn(schedulers.io)
                 .withLatestFrom(view.message()) { _, message -> message }
                 .filter { it.isNotEmpty() }
-                .map { Message(it, Calendar.getInstance().time) }
+                .map { Message("", it, Calendar.getInstance().time) }
                 .flatMapCompletable {
                     interactor.saveMessage(it)
                             .observeOn(schedulers.ui)

@@ -60,4 +60,17 @@
         app:layout_constraintTop_toBottomOf="@+id/profileImage"
         tools:text="MessageBox" />
 
+    <ImageView
+        android:id="@+id/deletePost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:contentDescription="@string/content_description"
+        android:focusable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_delete_black" />
+
 </android.support.constraint.ConstraintLayout>

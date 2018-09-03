@@ -59,7 +59,7 @@ class PostDialog : BaseDialogFragment(), PostView {
     override fun setupComponent() {
         DaggerTimelineComponent.builder()
                 .appComponent(TwitletApplication[context!!].component)
-                .timelineModule(TimelineModule())
+                .timelineModule(TimelineModule(activity?.supportFragmentManager!!))
                 .build()
                 .inject(this)
     }

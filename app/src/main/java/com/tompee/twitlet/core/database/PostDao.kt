@@ -7,4 +7,5 @@ interface PostDao {
     fun savePost(post: PostEntity, user: UserEntity): Completable
 
     fun getPosts(): Observable<List<PostEntity>>
+    fun deletePost(postId: String): Completable
 }

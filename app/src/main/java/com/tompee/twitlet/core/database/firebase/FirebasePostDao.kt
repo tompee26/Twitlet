@@ -9,6 +9,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 
 class FirebasePostDao(private val db: FirebaseFirestore) : PostDao {
+
     companion object {
         private const val POSTS = "posts"
     }
@@ -24,14 +25,21 @@ class FirebasePostDao(private val db: FirebaseFirestore) : PostDao {
                 db.collection(POSTS)
                         .orderBy("time", Query.Direction.DESCENDING)
                         .addSnapshotListener { value, error ->
-                    if (error != null) {
-                        emitter.onError(error)
-                    }
-                    val posts = ArrayList<PostEntity>()
-                    value?.forEach { doc ->
-                        posts.add(doc.toObject(PostEntity::class.java))
-                    }
-                    emitter.onNext(posts)
-                }
+                            if (error != null) {
+                                emitter.onError(error)
+                            }
+                            val posts = ArrayList<PostEntity>()
+                            value?.forEach { doc ->
+                                posts.add(doc.toObject(PostEntity::class.java))
+                            }
+                            emitter.onNext(posts)
+                        }
+            }
+
+    override fun deletePost(postId: String): Completable =
+            Completable.create { emitter ->
+                db.collection(POSTS).document(postId)
+                        .delete()
+                emitter.onComplete()
             }
 }

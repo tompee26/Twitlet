@@ -1,18 +1,22 @@
 package com.tompee.twitlet.feature.timeline
 
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import com.tompee.twitlet.R
+import com.tompee.twitlet.feature.timeline.delete.DeleteDialog
 import com.tompee.twitlet.model.Post
 import kotlinx.android.synthetic.main.list_post.view.*
-import kotlinx.android.synthetic.main.timeline_profile.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
-class TimelineAdapter(private val postList: List<Post>) : RecyclerView.Adapter<TimelineAdapter.TimelineViewHolder>() {
+class TimelineAdapter(private val supportFragmentManager: FragmentManager) : RecyclerView.Adapter<TimelineAdapter.TimelineViewHolder>() {
+    var postList: List<Post> = ArrayList()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineViewHolder =
             TimelineViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_post, parent, false))
 
@@ -34,6 +38,17 @@ class TimelineAdapter(private val postList: List<Post>) : RecyclerView.Adapter<T
                         .into(view.profileImage)
             } else {
                 view.profileImage.setImageResource(R.drawable.ic_account_circle_primary)
+            }
+
+            if (post.user.isAuthenticated) {
+                view.deletePost.visibility = View.VISIBLE
+            } else {
+                view.deletePost.visibility = View.INVISIBLE
+            }
+
+            view.deletePost.setOnClickListener {
+                val dialog = DeleteDialog.newInstance(post.message.postId)
+                dialog.show(supportFragmentManager, "deleteDialog")
             }
         }
     }
