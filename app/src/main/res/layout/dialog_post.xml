@@ -17,8 +17,8 @@
             android:gravity="center"
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/label_post"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/colorLight" />
     </FrameLayout>
 
@@ -73,5 +73,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+
+    <ImageView
+        android:id="@+id/postPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/content_description"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postField" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,8 +1,11 @@
 package com.tompee.twitlet.feature.timeline.post
 
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.squareup.picasso.Picasso
@@ -15,7 +18,9 @@ import com.tompee.twitlet.model.User
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.dialog_post.view.*
+import java.io.File
 import javax.inject.Inject
+
 
 class PostDialog : BaseDialogFragment(), PostView {
 
@@ -23,8 +28,11 @@ class PostDialog : BaseDialogFragment(), PostView {
     lateinit var postPresenter: PostPresenter
     private lateinit var customView: View
     private val post = PublishSubject.create<Any>()
+    private val image = PublishSubject.create<String>()
 
     companion object {
+        private const val RESULT_LOAD_IMAGE = 1
+
         fun newInstance(): PostDialog {
             return PostDialog()
         }
@@ -36,6 +44,7 @@ class PostDialog : BaseDialogFragment(), PostView {
         return AlertDialog.Builder(activity!!)
                 .setView(customView)
                 .setCancelable(false)
+                .setNeutralButton(R.string.label_post_add_photo) { _, _ -> }
                 .setPositiveButton(R.string.label_post_button) { _, _ -> }
                 .setNegativeButton(R.string.label_cancel_button) { dialog, _ ->
                     dialog.dismiss()
@@ -48,6 +57,31 @@ class PostDialog : BaseDialogFragment(), PostView {
         val button = (dialog as AlertDialog).getButton(Dialog.BUTTON_POSITIVE)
         button.setOnClickListener {
             post.onNext(it)
+        }
+        val neutralButton = (dialog as AlertDialog).getButton(Dialog.BUTTON_NEUTRAL)
+        neutralButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, RESULT_LOAD_IMAGE)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
+            val selectedImage = data.data
+            val columns = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor = activity?.contentResolver?.query(selectedImage, columns,
+                    null, null, null)
+            cursor?.apply {
+                moveToFirst()
+                val index = getColumnIndex(columns[0])
+                val path = getString(index)
+                cursor.close()
+                customView.postPhoto.visibility = View.VISIBLE
+                Picasso.get()
+                        .load(File(path))
+                        .into(customView.postPhoto)
+            }
         }
     }
 
@@ -65,6 +99,8 @@ class PostDialog : BaseDialogFragment(), PostView {
     }
 
     //region PostView
+    override fun image(): Observable<String> = image
+
     override fun post(): Observable<Any> = post
 
     override fun message(): Observable<String> = RxTextView.textChanges(customView.postField)

@@ -1,5 +1,6 @@
 package com.tompee.twitlet.feature.timeline
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -21,10 +22,17 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_timeline.*
 import kotlinx.android.synthetic.main.timeline_profile.*
 import kotlinx.android.synthetic.main.toolbar.*
+import pub.devrel.easypermissions.AfterPermissionGranted
+import pub.devrel.easypermissions.EasyPermissions
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+
 class TimelineActivity : BaseActivity(), TimelineView {
+
+    companion object {
+        private const val STORAGE_PERMISSION_REQUEST = 190
+    }
 
     @Inject
     lateinit var timelinePresenter: TimelinePresenter
@@ -51,6 +59,7 @@ class TimelineActivity : BaseActivity(), TimelineView {
                     val logoutDialog = LogoutDialog.newInstance()
                     logoutDialog.show(supportFragmentManager, "logoutDialog")
                 }
+        requestPermission()
         timelinePresenter.attachView(this)
     }
 
@@ -83,6 +92,21 @@ class TimelineActivity : BaseActivity(), TimelineView {
 
     override fun layoutId(): Int = R.layout.activity_timeline
 
+    @AfterPermissionGranted(STORAGE_PERMISSION_REQUEST)
+    private fun requestPermission() {
+        val perms = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (!EasyPermissions.hasPermissions(this, *perms)) {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.message_storage_rationale),
+                    STORAGE_PERMISSION_REQUEST, *perms)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
     override fun setupComponent() {
         DaggerTimelineComponent.builder()
                 .appComponent(TwitletApplication[this].component)
@@ -90,7 +114,6 @@ class TimelineActivity : BaseActivity(), TimelineView {
                 .build()
                 .inject(this)
     }
-
 
     //region TimelineView
     override fun setAdapter(adapter: TimelineAdapter) {

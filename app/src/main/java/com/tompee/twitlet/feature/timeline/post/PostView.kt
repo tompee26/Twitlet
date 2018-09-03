@@ -7,6 +7,7 @@ import io.reactivex.Observable
 interface PostView : BaseView {
     fun message(): Observable<String>
     fun post(): Observable<Any>
+    fun image(): Observable<String>
 
     fun setUser(user: User)
     fun dismiss()
