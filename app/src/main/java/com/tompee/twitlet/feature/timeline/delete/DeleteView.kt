@@ -8,4 +8,5 @@ interface DeleteView : BaseView {
 
     fun dismiss()
     fun postId(): String
+    fun imageUrl(): String
 }

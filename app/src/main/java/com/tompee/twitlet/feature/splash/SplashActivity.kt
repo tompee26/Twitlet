@@ -1,6 +1,8 @@
 package com.tompee.twitlet.feature.splash
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import com.tompee.twitlet.R
 import com.tompee.twitlet.TwitletApplication
@@ -10,6 +12,7 @@ import com.tompee.twitlet.dependency.module.SplashModule
 import com.tompee.twitlet.feature.login.LoginActivity
 import com.tompee.twitlet.feature.profile.ProfileActivity
 import com.tompee.twitlet.feature.timeline.TimelineActivity
+import kotlinx.android.synthetic.main.activity_splash.*
 import javax.inject.Inject
 
 class SplashActivity : BaseActivity(), SplashView {
@@ -18,6 +21,7 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        progress.indeterminateDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
         splashPresenter.attachView(this)
     }
 

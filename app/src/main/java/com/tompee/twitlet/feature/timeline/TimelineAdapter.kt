@@ -31,6 +31,17 @@ class TimelineAdapter(private val supportFragmentManager: FragmentManager) : Rec
             view.name.text = post.user.nickname
             view.time.text = format.format(post.message.time)
             view.messageBox.text = post.message.message
+            view.messageBox.visibility = if (post.message.message.isEmpty()) View.GONE else View.VISIBLE
+
+            if (post.message.image.isNotEmpty()) {
+                view.postImage.visibility = View.VISIBLE
+                Picasso.get()
+                        .load(post.message.image)
+                        .into(view.postImage)
+            } else {
+                view.postImage.setImageDrawable(null)
+                view.postImage.visibility = View.INVISIBLE
+            }
 
             if (post.user.imageUrl.isNotEmpty()) {
                 Picasso.get()
@@ -40,14 +51,10 @@ class TimelineAdapter(private val supportFragmentManager: FragmentManager) : Rec
                 view.profileImage.setImageResource(R.drawable.ic_account_circle_primary)
             }
 
-            if (post.user.isAuthenticated) {
-                view.deletePost.visibility = View.VISIBLE
-            } else {
-                view.deletePost.visibility = View.INVISIBLE
-            }
+            view.deletePost.visibility = if (post.user.isAuthenticated) View.VISIBLE else View.INVISIBLE
 
             view.deletePost.setOnClickListener {
-                val dialog = DeleteDialog.newInstance(post.message.postId)
+                val dialog = DeleteDialog.newInstance(post.message.postId, post.message.image)
                 dialog.show(supportFragmentManager, "deleteDialog")
             }
         }

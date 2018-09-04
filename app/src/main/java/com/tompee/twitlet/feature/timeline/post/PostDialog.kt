@@ -14,6 +14,7 @@ import com.tompee.twitlet.TwitletApplication
 import com.tompee.twitlet.base.BaseDialogFragment
 import com.tompee.twitlet.dependency.component.DaggerTimelineComponent
 import com.tompee.twitlet.dependency.module.TimelineModule
+import com.tompee.twitlet.feature.common.ProgressDialog
 import com.tompee.twitlet.model.User
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -29,6 +30,7 @@ class PostDialog : BaseDialogFragment(), PostView {
     private lateinit var customView: View
     private val post = PublishSubject.create<Any>()
     private val image = PublishSubject.create<String>()
+    private val progressDialog = ProgressDialog.newInstance(R.color.colorPrimary, R.string.message_post_progress)
 
     companion object {
         private const val RESULT_LOAD_IMAGE = 1
@@ -77,7 +79,7 @@ class PostDialog : BaseDialogFragment(), PostView {
                 val index = getColumnIndex(columns[0])
                 val path = getString(index)
                 cursor.close()
-                customView.postPhoto.visibility = View.VISIBLE
+                image.onNext(path)
                 Picasso.get()
                         .load(File(path))
                         .into(customView.postPhoto)
@@ -116,5 +118,12 @@ class PostDialog : BaseDialogFragment(), PostView {
         customView.email.text = user.email
     }
 
+    override fun showProgressDialog() {
+        progressDialog.show(activity?.supportFragmentManager, "progressDialog")
+    }
+
+    override fun dismissProgressDialog() {
+        progressDialog.dismiss()
+    }
     //endregion
 }

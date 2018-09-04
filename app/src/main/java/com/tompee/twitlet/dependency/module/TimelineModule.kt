@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentManager
 import com.tompee.twitlet.base.Schedulers
 import com.tompee.twitlet.core.auth.Authenticator
 import com.tompee.twitlet.core.database.PostDao
+import com.tompee.twitlet.core.storage.Storage
 import com.tompee.twitlet.dependency.scope.TimelineScope
 import com.tompee.twitlet.feature.timeline.TimelineAdapter
 import com.tompee.twitlet.feature.timeline.TimelinePresenter
@@ -45,6 +46,7 @@ class TimelineModule(private val fragmentManager: FragmentManager) {
     @Provides
     fun provideTimelineInteractor(postDao: PostDao,
                                   authenticator: Authenticator,
+                                  storage: Storage,
                                   user: User): TimelineInteractor =
-            TimelineInteractor(postDao, authenticator, user)
+            TimelineInteractor(postDao, authenticator, storage, user)
 }

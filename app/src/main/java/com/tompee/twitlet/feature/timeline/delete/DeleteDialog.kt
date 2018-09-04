@@ -20,11 +20,13 @@ class DeleteDialog : BaseDialogFragment(), DeleteView {
 
     companion object {
         private const val TAG_POST_ID = "postId"
+        private const val TAG_IMAGE_URL = "imageUrl"
 
-        fun newInstance(postId: String): DeleteDialog {
+        fun newInstance(postId: String, imageUrl: String): DeleteDialog {
             val dialog = DeleteDialog()
             val bundle = Bundle()
             bundle.putString(TAG_POST_ID, postId)
+            bundle.putString(TAG_IMAGE_URL, imageUrl)
             dialog.arguments = bundle
             return dialog
         }
@@ -68,5 +70,8 @@ class DeleteDialog : BaseDialogFragment(), DeleteView {
     override fun delete(): Observable<Any> = deleteSubject
 
     override fun postId(): String = arguments?.getString(TAG_POST_ID)!!
+
+    override fun imageUrl(): String = arguments?.getString(TAG_IMAGE_URL)!!
+
     //endregion
 }

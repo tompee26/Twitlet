@@ -6,7 +6,7 @@ import com.tompee.twitlet.core.database.PostDao
 import com.tompee.twitlet.core.database.UserDao
 import com.tompee.twitlet.core.database.firebase.FirebasePostDao
 import com.tompee.twitlet.core.database.firebase.FirebaseUserDao
-import com.tompee.twitlet.core.storage.FirebaseStorage
+import com.tompee.twitlet.core.storage.firebase.FirebaseStorage
 import com.tompee.twitlet.core.storage.Storage
 import dagger.Module
 import dagger.Provides

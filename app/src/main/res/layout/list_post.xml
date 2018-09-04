@@ -6,6 +6,13 @@
     android:layout_height="wrap_content"
     android:background="@color/colorBackground">
 
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="profileImage,messageBox" />
+
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/profileImage"
         android:layout_width="52dp"
@@ -46,7 +53,6 @@
         android:id="@+id/messageBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -54,23 +60,32 @@
         android:maxLines="12"
         android:textColor="@color/colorDark"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileImage"
         tools:text="MessageBox" />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/deletePost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:clickable="true"
-        android:contentDescription="@string/content_description"
         android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_delete_black" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/postImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier" />
 
 </android.support.constraint.ConstraintLayout>

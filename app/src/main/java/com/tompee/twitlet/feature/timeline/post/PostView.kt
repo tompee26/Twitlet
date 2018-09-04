@@ -11,4 +11,6 @@ interface PostView : BaseView {
 
     fun setUser(user: User)
     fun dismiss()
+    fun showProgressDialog()
+    fun dismissProgressDialog()
 }
