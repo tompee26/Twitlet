@@ -1,23 +1,16 @@
 # Twitlet - Share your thoughts!
 # Features
 - Create your own account
-<img src="asset/login.jpg" width="108" height="222">
-<img src="asset/signup.jpg" width="108" height="222">
+<img src="asset/login.jpg" width="108" height="222"> <img src="asset/signup.jpg" width="108" height="222">
 
 - Create a profile
 <img src="asset/profile.jpg" width="108" height="222">
 
-- Add a post to a collective timeline
-<img src="asset/createpost.jpg" width="108" height="222">
+- Add/Delete a post to a collective timeline
+<img src="asset/createpost.jpg" width="108" height="222"> <img src="asset/delete.jpg" width="108" height="222">
 
-- Delete your own post
-<img src="asset/delete.jpg" width="108" height="222">
-
-- View the collective timeline
-<img src="asset/timeline.jpg" width="108" height="222">
-
-- View individual posts
-<img src="asset/post.jpg" width="108" height="222">
+- View the collective timeline / individual posts
+<img src="asset/timeline.jpg" width="108" height="222"> <img src="asset/post.jpg" width="108" height="222">
 
 # Getting Started
 
