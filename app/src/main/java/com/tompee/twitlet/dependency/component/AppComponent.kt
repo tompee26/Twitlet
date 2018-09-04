@@ -7,17 +7,19 @@ import com.tompee.twitlet.core.asset.AssetManager
 import com.tompee.twitlet.core.auth.Authenticator
 import com.tompee.twitlet.core.database.PostDao
 import com.tompee.twitlet.core.database.UserDao
+import com.tompee.twitlet.core.image.Renderer
 import com.tompee.twitlet.core.storage.Storage
 import com.tompee.twitlet.dependency.module.AppModule
 import com.tompee.twitlet.dependency.module.AuthModule
 import com.tompee.twitlet.dependency.module.DataModule
+import com.tompee.twitlet.dependency.module.ImageModule
 import com.tompee.twitlet.dependency.module.SchedulerModule
 import com.tompee.twitlet.model.User
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, SchedulerModule::class, AuthModule::class, DataModule::class])
+@Component(modules = [AppModule::class, SchedulerModule::class, AuthModule::class, DataModule::class, ImageModule::class])
 interface AppComponent {
 
     //region AppModule
@@ -44,6 +46,9 @@ interface AppComponent {
     fun postDao(): PostDao
 
     fun storage(): Storage
+    //endregion
 
+    //region ImageModule
+    fun renderer(): Renderer
     //endregion
 }

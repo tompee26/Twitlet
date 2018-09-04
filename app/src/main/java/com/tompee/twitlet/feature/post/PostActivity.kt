@@ -2,11 +2,11 @@ package com.tompee.twitlet.feature.post
 
 import android.os.Bundle
 import android.view.View
-import com.squareup.picasso.Picasso
 import com.tompee.twitlet.Constants
 import com.tompee.twitlet.R
 import com.tompee.twitlet.TwitletApplication
 import com.tompee.twitlet.base.BaseActivity
+import com.tompee.twitlet.core.image.Renderer
 import com.tompee.twitlet.dependency.component.DaggerPostComponent
 import com.tompee.twitlet.dependency.module.PostModule
 import com.tompee.twitlet.model.Post
@@ -24,6 +24,9 @@ class PostActivity : BaseActivity(), PostView {
 
     @Inject
     lateinit var postPresenter: PostPresenter
+
+    @Inject
+    lateinit var renderer: Renderer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +60,7 @@ class PostActivity : BaseActivity(), PostView {
     override fun setPost(post: Post) {
         /* profile image */
         if (post.user.imageUrl.isNotEmpty()) {
-            Picasso.get()
-                    .load(post.user.imageUrl)
-                    .into(profileImage)
+            renderer.displayImage(post.user.imageUrl, profileImage)
         }
 
         /* name */
@@ -77,9 +78,7 @@ class PostActivity : BaseActivity(), PostView {
 
         /* photo */
         if (post.message.image.isNotEmpty()) {
-            Picasso.get()
-                    .load(post.message.image)
-                    .into(postPhoto)
+            renderer.displayImage(post.message.image, postPhoto)
         }
 
         val format = SimpleDateFormat(Constants.DATE_READABLE_FORMAT, Locale.getDefault())

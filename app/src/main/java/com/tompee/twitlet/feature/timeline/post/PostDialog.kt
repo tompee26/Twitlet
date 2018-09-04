@@ -8,10 +8,10 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.squareup.picasso.Picasso
 import com.tompee.twitlet.R
 import com.tompee.twitlet.TwitletApplication
 import com.tompee.twitlet.base.BaseDialogFragment
+import com.tompee.twitlet.core.image.Renderer
 import com.tompee.twitlet.dependency.component.DaggerTimelineComponent
 import com.tompee.twitlet.dependency.module.TimelineModule
 import com.tompee.twitlet.feature.common.ProgressDialog
@@ -27,6 +27,10 @@ class PostDialog : BaseDialogFragment(), PostView {
 
     @Inject
     lateinit var postPresenter: PostPresenter
+
+    @Inject
+    lateinit var renderer: Renderer
+
     private lateinit var customView: View
     private val post = PublishSubject.create<Any>()
     private val image = PublishSubject.create<String>()
@@ -80,9 +84,7 @@ class PostDialog : BaseDialogFragment(), PostView {
                 val path = getString(index)
                 cursor.close()
                 image.onNext(path)
-                Picasso.get()
-                        .load(File(path))
-                        .into(customView.postPhoto)
+                renderer.displayImage(File(path), customView.postPhoto)
             }
         }
     }
@@ -110,9 +112,7 @@ class PostDialog : BaseDialogFragment(), PostView {
 
     override fun setUser(user: User) {
         if (user.imageUrl.isNotEmpty()) {
-            Picasso.get()
-                    .load(user.imageUrl)
-                    .into(customView.profileImage)
+            renderer.displayImage(user.imageUrl, customView.profileImage)
         }
         customView.name.text = user.nickname
         customView.email.text = user.email

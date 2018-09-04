@@ -7,9 +7,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.squareup.picasso.Picasso
 import com.tompee.twitlet.Constants.DATE_READABLE_FORMAT
 import com.tompee.twitlet.R
+import com.tompee.twitlet.core.image.Renderer
 import com.tompee.twitlet.feature.post.PostActivity
 import com.tompee.twitlet.feature.timeline.delete.DeleteDialog
 import com.tompee.twitlet.model.Post
@@ -19,7 +19,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class TimelineAdapter(private val context: Context,
-                      private val supportFragmentManager: FragmentManager) :
+                      private val supportFragmentManager: FragmentManager,
+                      private val renderer: Renderer) :
         RecyclerView.Adapter<TimelineAdapter.TimelineViewHolder>() {
     var postList: List<Post> = ArrayList()
 
@@ -41,18 +42,14 @@ class TimelineAdapter(private val context: Context,
 
             if (post.message.image.isNotEmpty()) {
                 view.postImage.visibility = View.VISIBLE
-                Picasso.get()
-                        .load(post.message.image)
-                        .into(view.postImage)
+                renderer.displayImage(post.message.image, view.postImage)
             } else {
                 view.postImage.setImageDrawable(null)
                 view.postImage.visibility = View.INVISIBLE
             }
 
             if (post.user.imageUrl.isNotEmpty()) {
-                Picasso.get()
-                        .load(post.user.imageUrl)
-                        .into(view.profileImage)
+                renderer.displayImage(post.user.imageUrl, view.profileImage)
             } else {
                 view.profileImage.setImageResource(R.drawable.ic_account_circle_primary)
             }

@@ -7,10 +7,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.view.RxView
-import com.squareup.picasso.Picasso
 import com.tompee.twitlet.R
 import com.tompee.twitlet.TwitletApplication
 import com.tompee.twitlet.base.BaseActivity
+import com.tompee.twitlet.core.image.Renderer
 import com.tompee.twitlet.dependency.component.DaggerTimelineComponent
 import com.tompee.twitlet.dependency.module.TimelineModule
 import com.tompee.twitlet.feature.about.AboutActivity
@@ -36,6 +36,10 @@ class TimelineActivity : BaseActivity(), TimelineView {
 
     @Inject
     lateinit var timelinePresenter: TimelinePresenter
+
+    @Inject
+    lateinit var renderer: Renderer
+
     private val logoutSubject = PublishSubject.create<Any>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,9 +126,7 @@ class TimelineActivity : BaseActivity(), TimelineView {
 
     override fun setUser(user: User) {
         if (user.imageUrl.isNotEmpty()) {
-            Picasso.get()
-                    .load(user.imageUrl)
-                    .into(profileImage)
+            renderer.displayImage(user.imageUrl, profileImage)
         }
         name.text = user.nickname
         email.text = user.email
