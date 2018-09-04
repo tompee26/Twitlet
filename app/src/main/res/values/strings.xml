@@ -53,5 +53,6 @@
     <string name="label_timeline">Timeline</string>
     <string name="label_logout">Logout</string>
     <string name="label_delete">Delete message</string>
+    <string name="label_post_detail">Post</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.tompee.twitlet.interactor
 
+import com.tompee.twitlet.Constants.DATE_TIME_FORMAT
 import com.tompee.twitlet.base.BaseInteractor
 import com.tompee.twitlet.core.auth.Authenticator
 import com.tompee.twitlet.core.database.PostDao
@@ -19,9 +20,6 @@ class TimelineInteractor(private val postDao: PostDao,
                          private val authenticator: Authenticator,
                          private val storage: Storage,
                          private val loggedInUser: User) : BaseInteractor {
-    companion object {
-        private const val DATE_TIME_FORMAT = "yyyyMMddHHmmss"
-    }
 
     fun saveMessage(message: Message): Completable {
         val format = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())

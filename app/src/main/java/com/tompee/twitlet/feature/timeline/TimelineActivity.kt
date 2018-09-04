@@ -110,7 +110,7 @@ class TimelineActivity : BaseActivity(), TimelineView {
     override fun setupComponent() {
         DaggerTimelineComponent.builder()
                 .appComponent(TwitletApplication[this].component)
-                .timelineModule(TimelineModule(supportFragmentManager))
+                .timelineModule(TimelineModule(this))
                 .build()
                 .inject(this)
     }

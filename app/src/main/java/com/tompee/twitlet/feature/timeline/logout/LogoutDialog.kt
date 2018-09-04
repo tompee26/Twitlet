@@ -57,7 +57,7 @@ class LogoutDialog : BaseDialogFragment(), LogoutView {
     override fun setupComponent() {
         DaggerTimelineComponent.builder()
                 .appComponent(TwitletApplication[context!!].component)
-                .timelineModule(TimelineModule(activity?.supportFragmentManager!!))
+                .timelineModule(TimelineModule(activity!!))
                 .build()
                 .inject(this)
     }

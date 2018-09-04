@@ -45,6 +45,10 @@
             android:name=".feature.license.LicenseActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
 
+        <activity
+            android:name=".feature.post.PostActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+
     </application>
 
 </manifest>

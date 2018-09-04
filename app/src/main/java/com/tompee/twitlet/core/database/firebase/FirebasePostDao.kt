@@ -7,6 +7,7 @@ import com.tompee.twitlet.core.database.PostEntity
 import com.tompee.twitlet.core.database.UserEntity
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 
 class FirebasePostDao(private val db: FirebaseFirestore) : PostDao {
 
@@ -35,6 +36,19 @@ class FirebasePostDao(private val db: FirebaseFirestore) : PostDao {
                             emitter.onNext(posts)
                         }
             }
+
+    override fun getPost(postId: String): Single<PostEntity> =
+            Single.create { emitter ->
+                db.collection(POSTS).document(postId).get()
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                emitter.onSuccess(it.result.toObject(PostEntity::class.java)!!)
+                            } else {
+                                emitter.onError(Throwable(it.exception?.message))
+                            }
+                        }
+            }
+
 
     override fun deletePost(postId: String): Completable =
             Completable.create { emitter ->

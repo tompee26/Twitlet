@@ -1,6 +1,6 @@
 package com.tompee.twitlet.dependency.module
 
-import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentActivity
 import com.tompee.twitlet.base.Schedulers
 import com.tompee.twitlet.core.auth.Authenticator
 import com.tompee.twitlet.core.database.PostDao
@@ -17,7 +17,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class TimelineModule(private val fragmentManager: FragmentManager) {
+class TimelineModule(private val fragmentActivity: FragmentActivity) {
     @Provides
     fun provideDeletePresenter(timelineInteractor: TimelineInteractor,
                                schedulers: Schedulers): DeletePresenter =
@@ -40,7 +40,8 @@ class TimelineModule(private val fragmentManager: FragmentManager) {
             TimelinePresenter(timelineInteractor, schedulers, timelineAdapter)
 
     @Provides
-    fun provideTimelineAdapter(): TimelineAdapter = TimelineAdapter(fragmentManager)
+    fun provideTimelineAdapter(): TimelineAdapter = TimelineAdapter(fragmentActivity,
+            fragmentActivity.supportFragmentManager)
 
     @TimelineScope
     @Provides
