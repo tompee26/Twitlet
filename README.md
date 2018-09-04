@@ -3,8 +3,7 @@
 - Create your own account <br>
 <img src="asset/login.jpg" width="108" height="222"> <img src="asset/signup.jpg" width="108" height="222">
 
-- Create a profile
-<img src="asset/profile.jpg" width="108" height="222">
+- Create a profile <br> <img src="asset/profile.jpg" width="108" height="222">
 
 - Add/Delete a post to a collective timeline. A single photo can also be included. <br>
 <img src="asset/createpost.jpg" width="108" height="222"> <img src="asset/delete.jpg" width="108" height="222">
