@@ -10,7 +10,7 @@ class PicassoRenderer : Renderer {
     private val instance: Picasso = Picasso.get()
 
     init {
-        instance.setIndicatorsEnabled(true)
+        instance.setIndicatorsEnabled(false)
     }
 
     override fun displayImage(url: String, view: ImageView) {
