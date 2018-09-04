@@ -41,8 +41,15 @@ class PostPresenter(timelineInteractor: TimelineInteractor,
                 .flatMapCompletable {
                     interactor.saveMessage(it)
                             .observeOn(schedulers.ui)
-                            .doOnComplete { view.dismissProgressDialog() }
-                            .doOnComplete { view.dismiss() }
+                            .doOnComplete {
+                                view.dismissProgressDialog()
+                                view.dismiss()
+                            }
+                            .doOnError{
+                                view.dismissProgressDialog()
+                                view.showError(it.message!!)
+                            }
+                            .onErrorComplete()
                 }
                 .subscribe({ Timber.d("completed") }, Timber::e)
     }

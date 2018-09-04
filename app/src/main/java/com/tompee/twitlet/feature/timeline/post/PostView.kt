@@ -13,4 +13,5 @@ interface PostView : BaseView {
     fun dismiss()
     fun showProgressDialog()
     fun dismissProgressDialog()
+    fun showError(message: String)
 }

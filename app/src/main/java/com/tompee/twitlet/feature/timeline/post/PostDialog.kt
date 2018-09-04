@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.design.widget.Snackbar
 import android.view.View
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.tompee.twitlet.R
@@ -125,5 +126,10 @@ class PostDialog : BaseDialogFragment(), PostView {
     override fun dismissProgressDialog() {
         progressDialog.dismiss()
     }
+
+    override fun showError(message: String) {
+        Snackbar.make(customView.findViewById(android.R.id.content)!!, message, Snackbar.LENGTH_LONG).show()
+    }
+
     //endregion
 }
