@@ -73,7 +73,6 @@ class ProfileActivity : BaseActivity(), ProfileView {
 
     override fun nickname(): Observable<String> = RxTextView.textChanges(nickname)
             .skipInitialValue()
-            .distinct()
             .map { it.toString() }
             .map { it.trim() }
 

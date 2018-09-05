@@ -75,13 +75,11 @@ class LoginFragment : BaseFragment(), LoginPageView {
     //region LoginPageView
     override fun getEmail(): Observable<String> = RxTextView.textChanges(userView)
             .skipInitialValue()
-            .distinct()
             .map { it.toString() }
             .map { it.trim() }
 
     override fun getPassword(): Observable<String> = RxTextView.textChanges(passView)
             .skipInitialValue()
-            .distinct()
             .map { it.toString() }
             .map { it.trim() }
 
