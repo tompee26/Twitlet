@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.tompee.twitlet.Constants
 import com.tompee.twitlet.Constants.DATE_READABLE_FORMAT
 import com.tompee.twitlet.R
 import com.tompee.twitlet.core.image.Renderer
@@ -61,10 +62,17 @@ class TimelineAdapter(private val context: Context,
                 dialog.show(supportFragmentManager, "deleteDialog")
             }
 
+            val stringFormat = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.getDefault())
             view.setOnClickListener {
                 val intent = Intent(context, PostActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 intent.putExtra(PostActivity.TAG_POST_ID, post.message.postId)
+                intent.putExtra(PostActivity.TAG_PROFILE_IMAGE, post.user.imageUrl)
+                intent.putExtra(PostActivity.TAG_PROFILE_NAME, post.user.nickname)
+                intent.putExtra(PostActivity.TAG_PROFILE_EMAIL, post.user.email)
+                intent.putExtra(PostActivity.TAG_POST_MESSAGE, post.message.message)
+                intent.putExtra(PostActivity.TAG_POST_IMAGE, post.message.image)
+                intent.putExtra(PostActivity.TAG_POST_TIME, stringFormat.format(post.message.time))
                 context.startActivity(intent)
             }
         }
