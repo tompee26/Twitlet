@@ -13,7 +13,11 @@ class FirebasePostDao(private val db: FirebaseFirestore) : PostDao {
 
     companion object {
         private const val POSTS = "posts"
+        private const val TIME = "time"
     }
+
+    fun getPagingQuery() =
+            db.collection(POSTS).orderBy(TIME, Query.Direction.DESCENDING)
 
     override fun savePost(post: PostEntity, user: UserEntity): Completable =
             Completable.create { emitter ->
@@ -24,7 +28,7 @@ class FirebasePostDao(private val db: FirebaseFirestore) : PostDao {
     override fun getPosts(): Observable<List<PostEntity>> =
             Observable.create { emitter ->
                 db.collection(POSTS)
-                        .orderBy("time", Query.Direction.DESCENDING)
+                        .orderBy(TIME, Query.Direction.DESCENDING)
                         .addSnapshotListener { value, error ->
                             if (error != null) {
                                 emitter.onError(error)

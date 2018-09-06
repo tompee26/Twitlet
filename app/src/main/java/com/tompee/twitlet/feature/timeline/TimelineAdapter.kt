@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter
+import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.tompee.twitlet.Constants
 import com.tompee.twitlet.Constants.DATE_READABLE_FORMAT
 import com.tompee.twitlet.R
@@ -17,21 +19,19 @@ import com.tompee.twitlet.model.Post
 import kotlinx.android.synthetic.main.list_post.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class TimelineAdapter(private val context: Context,
+class TimelineAdapter(options: FirestorePagingOptions<Post>,
+                      private val context: Context,
                       private val supportFragmentManager: FragmentManager,
                       private val renderer: Renderer) :
-        RecyclerView.Adapter<TimelineAdapter.TimelineViewHolder>() {
-    var postList: List<Post> = ArrayList()
+        FirestorePagingAdapter<Post, TimelineAdapter.TimelineViewHolder>(options) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineViewHolder =
             TimelineViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_post, parent, false))
 
-    override fun getItemCount(): Int = postList.count()
-
-    override fun onBindViewHolder(holder: TimelineViewHolder, position: Int) =
-            holder.bind(postList[position])
+    override fun onBindViewHolder(holder: TimelineViewHolder, position: Int, model: Post) {
+        holder.bind(model)
+    }
 
     inner class TimelineViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(post: Post) {
@@ -46,7 +46,7 @@ class TimelineAdapter(private val context: Context,
                 renderer.displayImage(post.message.image, view.postImage)
             } else {
                 view.postImage.setImageDrawable(null)
-                view.postImage.visibility = View.INVISIBLE
+                view.postImage.visibility = View.GONE
             }
 
             if (post.user.imageUrl.isNotEmpty()) {

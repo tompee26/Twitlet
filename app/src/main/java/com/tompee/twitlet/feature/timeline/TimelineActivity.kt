@@ -3,6 +3,7 @@ package com.tompee.twitlet.feature.timeline
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -24,12 +25,12 @@ import kotlinx.android.synthetic.main.timeline_profile.*
 import kotlinx.android.synthetic.main.toolbar.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
+import java.sql.Time
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
 class TimelineActivity : BaseActivity(), TimelineView {
-
     companion object {
         private const val STORAGE_PERMISSION_REQUEST = 190
     }
@@ -63,6 +64,11 @@ class TimelineActivity : BaseActivity(), TimelineView {
                     val logoutDialog = LogoutDialog.newInstance()
                     logoutDialog.show(supportFragmentManager, "logoutDialog")
                 }
+        swipeRefresh.setOnRefreshListener {
+            (recyclerView.adapter as TimelineAdapter).stopListening()
+            (recyclerView.adapter as TimelineAdapter).startListening()
+            swipeRefresh.isRefreshing = false
+        }
         requestPermission()
         timelinePresenter.attachView(this)
     }
