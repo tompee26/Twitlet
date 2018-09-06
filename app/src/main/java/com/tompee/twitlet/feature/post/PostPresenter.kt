@@ -18,7 +18,7 @@ class PostPresenter(postInteractor: PostInteractor,
     }
 
     private fun setupPost() {
-        addSubscription(interactor.getPost(view.postId())
+        addSubscription(interactor.getPostFromSerializedData()
                 .subscribeOn(schedulers.io)
                 .observeOn(schedulers.ui)
                 .doOnSuccess {
@@ -26,5 +26,4 @@ class PostPresenter(postInteractor: PostInteractor,
                 }
                 .subscribe({}, Timber::e))
     }
-
 }

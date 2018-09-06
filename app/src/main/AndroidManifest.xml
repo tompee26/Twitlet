@@ -23,7 +23,8 @@
 
         <activity
             android:name=".feature.login.LoginActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".feature.profile.ProfileActivity"

@@ -9,7 +9,9 @@ import com.tompee.twitlet.base.BaseActivity
 import com.tompee.twitlet.core.image.Renderer
 import com.tompee.twitlet.dependency.component.DaggerPostComponent
 import com.tompee.twitlet.dependency.module.PostModule
+import com.tompee.twitlet.model.Message
 import com.tompee.twitlet.model.Post
+import com.tompee.twitlet.model.User
 import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.text.SimpleDateFormat
@@ -20,6 +22,12 @@ class PostActivity : BaseActivity(), PostView {
 
     companion object {
         const val TAG_POST_ID = "postId"
+        const val TAG_PROFILE_IMAGE = "profileImage"
+        const val TAG_PROFILE_NAME = "profileName"
+        const val TAG_PROFILE_EMAIL = "profileEmail"
+        const val TAG_POST_MESSAGE = "postMessage"
+        const val TAG_POST_IMAGE = "postImage"
+        const val TAG_POST_TIME = "postTime"
     }
 
     @Inject
@@ -47,9 +55,19 @@ class PostActivity : BaseActivity(), PostView {
     override fun layoutId(): Int = R.layout.activity_post
 
     override fun setupComponent() {
+        val format = SimpleDateFormat(Constants.DATE_TIME_FORMAT, Locale.getDefault())
+        val message = Message(intent.getStringExtra(TAG_POST_ID),
+                intent.getStringExtra(TAG_POST_MESSAGE),
+                intent.getStringExtra(TAG_POST_IMAGE),
+                format.parse(intent.getStringExtra(TAG_POST_TIME)))
+
+        val user = User(intent.getStringExtra(TAG_PROFILE_EMAIL), false,
+                intent.getStringExtra(TAG_PROFILE_NAME),
+                intent.getStringExtra(TAG_PROFILE_IMAGE))
+
         DaggerPostComponent.builder()
                 .appComponent(TwitletApplication[this].component)
-                .postModule(PostModule())
+                .postModule(PostModule(Post(message, user)))
                 .build()
                 .inject(this)
     }

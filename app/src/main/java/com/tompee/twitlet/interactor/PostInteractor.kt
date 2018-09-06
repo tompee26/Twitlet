@@ -11,9 +11,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class PostInteractor(private val postDao: PostDao,
-                     private val loggedInUser: User) : BaseInteractor {
+                     private val loggedInUser: User,
+                     private val post: Post) : BaseInteractor {
 
-    fun getPost(postId: String): Single<Post> = postDao.getPost(postId)
+    fun getPostByQuery(): Single<Post> = postDao.getPost(post.message.postId)
             .map {
                 val format = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
                 val message = Message(it.time, it.message, it.postImage, format.parse(it.time))
@@ -22,4 +23,5 @@ class PostInteractor(private val postDao: PostDao,
                 return@map Post(message, user)
             }
 
+    fun getPostFromSerializedData(): Single<Post> = Single.just(post)
 }
