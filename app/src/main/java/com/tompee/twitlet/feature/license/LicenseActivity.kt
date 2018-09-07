@@ -45,9 +45,10 @@ class LicenseActivity : BaseActivity(), LicenseView {
     }
 
     override fun setLicenseText(text: String) {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             content.text = Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
         } else {
+            @Suppress("DEPRECATION")
             content.text = Html.fromHtml(text)
         }
         content.movementMethod = LinkMovementMethod.getInstance()
